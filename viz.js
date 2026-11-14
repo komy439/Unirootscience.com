@@ -351,4 +351,85 @@
     m.querySelector('.artx').onclick = close; m.onclick = function (e) { if (e.target === m) close(); };
     addEventListener('keydown', function (e) { if (e.key === 'Escape' && !m.hidden) close(); });
   })();
+
+  /* ---------- uni root signal: try it by hand ---------- */
+  (function(){if(!document.getElementById('sgSp'))return;
+
+const OCOL2=['#ffffff','#ff7a00','#ffd000','#1f6fff','#0037d4','#9000ff','#ff4433','#ffaa00','#22e04a','#00b4ff','#0024a0','#ffd000'];
+const OC=n=>n===1?'#e00000':OCOL2[n-1],LIT=[1,4,7];
+let STEP=45;const FINAL=2.5,TRIPS=5;
+const DR=f=>{let n=f;while(n>9)n=String(n).split('').reduce((a,b)=>a+ +b,0);return n};   // digital root of the frequency
+const FREQS=[1147,1285,1471,1852,1714,1528];
+let FQ=1147,CYC=DR(FQ),CT=(STEP-FINAL)/CYC;
+function recalc(){CYC=Math.max(1,DR(FQ));const fin=Math.min(FINAL,STEP*.15);CT=(STEP-fin)/CYC}
+const F={end:0,start:.09,move:.18,gather:.78,back:.86,done:1};   // phases inside one journey (fraction)
+const speed=1;
+const $=id=>document.getElementById(id);
+function pair(sl,nm,on){const S=$(sl),N=$(nm);S.oninput=()=>{N.value=S.value;on(+S.value)};N.oninput=()=>{const v=+N.value;if(!isFinite(v)||v<=0)return;if(v>=+S.min&&v<=+S.max)S.value=v;on(v)}}
+const st={v:15,d:9};
+pair('sgfqS','sgfqN',v=>{FQ=Math.round(v);recalc();t=0});
+pair('sgvS','sgvN',v=>{st.v=Math.min(20,v)});
+pair('sgdS','sgdN',v=>{st.d=Math.min(50,Math.max(1,v))});
+pair('sgtS','sgtN',v=>{STEP=Math.max(2,v);recalc();t=0});
+const frac=v=>v-Math.floor(v),AMP=()=>Math.max(.15,st.v/20),DUTY=()=>st.d/100;
+// one impulse: arrival -> recoil backward -> push forward -> fading ring; blends to a sine as duty -> 50%
+function imp(p,D){const tau=.06+.6*D,r1=D*1.3,r2=D*1.8,a=D,b=a+r1,c=b+r2;
+  if(p<a)return Math.sin(Math.PI*p/a);if(p<b)return -.65*Math.sin(Math.PI*(p-a)/r1);if(p<c)return .8*Math.sin(Math.PI*(p-b)/r2);
+  return Math.exp(-(p-c)/tau)*Math.sin(2*Math.PI*(p-c)*3.2)*.22}
+function wave(n,u,ph){const D=DUTY(),k=n*1.5,sharp=Math.max(0,Math.min(1,(.5-D)/.43));
+  return AMP()*(sharp*imp(frac(u*k-ph*n*.25),D)+(1-sharp)*Math.sin(2*Math.PI*u*k-ph*n*2-n))}
+const sp=document.getElementById('sgSp'),cb=document.getElementById('sgCb');
+function fit(c){const W=c.clientWidth,H=c.clientHeight,d=2;if(!W||!H)return null;if(c.width!==Math.round(W*d)||c.height!==Math.round(H*d)){c.width=Math.round(W*d);c.height=Math.round(H*d)}const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,W,H);return{x,W,H}}
+function glow(x,X,Y,r,a,col){if(a<=0)return;const g=x.createRadialGradient(X,Y,0,X,Y,r);g.addColorStop(0,`rgba(${col},${a})`);g.addColorStop(1,`rgba(${col},0)`);x.fillStyle=g;x.beginPath();x.arc(X,Y,r,0,7);x.fill()}
+const sumAt=(u,ph)=>{let v=0;LIT.forEach(n=>{v+=Math.sin(2*Math.PI*n*u*1.5-ph*n-n)});return v/LIT.length};
+function spectrum(ph){const g=fit(sp);if(!g)return;const{x,W,H}=g,mid=H/2,A=H*.4;
+  for(let n=1;n<=12;n++){const on=LIT.includes(n),c=OC(n),phase=2*Math.PI*n*ph*.5;x.save();x.strokeStyle=c;x.globalAlpha=on?.95:.15;x.lineWidth=on?2.2:1;if(on){x.shadowColor=c;x.shadowBlur=8}x.beginPath();
+    for(let X=0;X<=W;X+=1.5){const u=X/W,y=on?mid-A*wave(n,u,ph):mid-A*.8*Math.sin(2*Math.PI*n*u*1.5-phase-n);X?x.lineTo(X,y):x.moveTo(X,y)}x.stroke();x.restore()}}
+function draw(t,el){const g=fit(cb);if(!g)return;const{x,W,H}=g,cx=W/2,half0=W/2-24,yL=H*.3,yS=H*.55,yC=H*.8,mid=(yL+yC)/2;
+  x.strokeStyle='#3a3a40';x.lineWidth=1.5;x.beginPath();x.moveTo(cx,4);x.lineTo(cx,H-4);x.stroke();
+  x.globalCompositeOperation='lighter';
+  const FIN=Math.min(FINAL,STEP*.15);if(t>=STEP-FIN){ // the meeting in the middle
+    const q=(t-(STEP-FIN))/FIN,f=Math.sin(Math.min(1,q*1.4)*Math.PI*.5),out=q>.7?1-(q-.7)/.3*.55:1;
+    x.fillStyle=`rgba(255,248,225,${.35*(1-q)})`;x.fillRect(0,0,W,H);
+    glow(x,cx,mid,30+90*f,out,'255,250,240');glow(x,cx,mid,12+20*f,out,'255,255,255');
+    for(let k=0;k<16;k++){const a=k*Math.PI/8+el*.3,r1=18,r2=30+90*f;x.strokeStyle=`rgba(255,236,190,${.35*out})`;x.lineWidth=1;x.beginPath();x.moveTo(cx+Math.cos(a)*r1,mid+Math.sin(a)*r1);x.lineTo(cx+Math.cos(a)*r2,mid+Math.sin(a)*r2);x.stroke()}
+    x.globalCompositeOperation='source-over';return}
+  const c=Math.floor(t/CT),u=(t%CT)/CT,half=half0*(1-c/CYC),dir=c%2===0?1:-1;   // distance shrinks every journey
+  const A=cx-dir*half,B=cx+dir*half,L=B-A,P=(a,b)=>Math.max(0,Math.min(1,(u-a)/(b-a)));
+  // faint marks of the earlier, wider journeys
+  for(let k=0;k<c;k++){const h=half0*(1-k/CYC);x.fillStyle='rgba(230,184,92,.18)';[cx-h,cx+h].forEach(X=>{x.fillRect(X-.5,mid-6,1,12)})}
+  // 1 · arrival lights first, 2 · then the start
+  const pa=P(F.end,F.end+.05),ps=P(F.start,F.start+.05),pulse=.8+.2*Math.sin(el*5);
+  if(u<F.end+.06){x.fillStyle=`rgba(255,248,225,${.22*(1-P(F.end,F.end+.06))})`;x.fillRect(B-26,0,52,H)}
+  glow(x,B,mid,24,.85*pa*pulse,'255,244,214');
+  if(u>=F.start){if(u<F.start+.06){x.fillStyle=`rgba(255,248,225,${.22*(1-P(F.start,F.start+.06))})`;x.fillRect(A-26,0,52,H)}
+    const land=u>F.back+.09?1+.7*Math.sin(P(F.back+.09,1)*Math.PI):1;glow(x,A,mid,24*land,.85*ps*pulse,'255,236,190')}
+  x.fillStyle='rgba(255,250,240,.9)';[A,B].forEach(X=>{x.beginPath();x.arc(X,mid,2.5,0,7);x.fill()});
+  // 3 · motion: light back and forth, sound slow, combined forming
+  const pr=P(F.move,F.gather);
+  if(u>=F.move&&u<F.gather+.01){
+    const s=pr*TRIPS,k=Math.min(TRIPS-1,Math.floor(s)),fr=pr>=1?1:s-k,fw=k%2===0,hx=fw?A+fr*L:B-fr*L;
+    x.beginPath();const tail=Math.abs(L)*.2,sg=Math.sign(L);for(let d=0;d<=tail;d+=1.5){const X=fw?hx-sg*d:hx+sg*d,env=1-d/tail,y=yL-H*.08*AMP()*env*imp(frac(d/(tail/3)),DUTY());d?x.lineTo(X,y):x.moveTo(X,y)}
+    x.strokeStyle='rgba(255,246,223,.95)';x.lineWidth=1.3;x.shadowColor='rgba(255,246,223,.9)';x.shadowBlur=8;x.stroke();x.shadowBlur=0;glow(x,hx,yL,9,1,'255,250,235');
+    const sx=A+pr*L;x.beginPath();for(let i=0;i<=120*pr;i++){const v=i/120,X=A+v*L,y=yS+H*.07*AMP()*sumAt(v,el*3);i?x.lineTo(X,y):x.moveTo(X,y)}
+    x.strokeStyle='rgba(232,169,72,.95)';x.lineWidth=1.6;x.shadowColor='rgba(232,169,72,.9)';x.shadowBlur=8;x.stroke();x.shadowBlur=0;glow(x,sx,yS+H*.07*AMP()*sumAt(pr,el*3),9,1,'232,169,72');
+    x.beginPath();for(let i=0;i<=200*pr;i++){const v=i/200,X=A+v*L,tex=imp(frac(v*TRIPS*3-el*2),DUTY()),y=yC-H*.09*AMP()*(sumAt(v,el*3)*.6+.5*tex);i?x.lineTo(X,y):x.moveTo(X,y)}
+    x.strokeStyle='rgba(255,226,154,.8)';x.lineWidth=1.5;x.shadowColor='rgba(255,226,154,.8)';x.shadowBlur=6;x.stroke();x.shadowBlur=0}
+  // 4 · gather at the arrival
+  if(u>=F.gather&&u<F.back+.01){const e=P(F.gather,F.back)**2;x.beginPath();for(let i=0;i<=160;i++){const v=i/160,X=B-L*(1-e)+v*L*(1-e),y=yC-(yC-mid)*e-(1-e)*H*.09*sumAt(v,el*3);i?x.lineTo(X,y):x.moveTo(X,y)}
+    x.strokeStyle='rgba(255,236,190,.9)';x.lineWidth=1.6+2*e;x.shadowColor='rgba(255,236,190,1)';x.shadowBlur=8+10*e;x.stroke();x.shadowBlur=0;glow(x,B,mid,14+26*e,.5+.5*e,'255,250,235')}
+  // 5 · cylinder beam back to the origin
+  if(u>=F.back){const q=P(F.back,F.back+.09),e=1-(1-q)**2,fade=1-P(.96,1),head=B-L*e,R=3+6*AMP(),lo=Math.min(head,B),w=Math.abs(B-head);
+    let gr=x.createLinearGradient(0,mid-R*2.6,0,mid+R*2.6);gr.addColorStop(0,'rgba(255,255,255,0)');gr.addColorStop(.5,`rgba(255,255,255,${.3*fade})`);gr.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=gr;x.fillRect(lo,mid-R*2.6,w,R*5.2);
+    gr=x.createLinearGradient(0,mid-R,0,mid+R);gr.addColorStop(0,`rgba(150,152,160,${.55*fade})`);gr.addColorStop(.35,`rgba(235,238,245,${.9*fade})`);gr.addColorStop(.5,`rgba(255,255,255,${fade})`);gr.addColorStop(.65,`rgba(235,238,245,${.9*fade})`);gr.addColorStop(1,`rgba(150,152,160,${.55*fade})`);x.fillStyle=gr;x.fillRect(lo,mid-R,w,R*2);
+    for(let k=0;k<5;k++){const v=(el*1.4+k/5)%1;glow(x,B-(B-head)*v,mid,R*1.6,.5*fade,'255,255,255')}
+    x.fillStyle=`rgba(255,255,255,${fade})`;[B,head].forEach(X=>{x.beginPath();x.ellipse(X,mid,R*.45,R,0,0,7);x.fill()});glow(x,head,mid,R*3.2,fade,'255,255,255')}
+  x.globalCompositeOperation='source-over'}
+let last=0,t=0,ph=0;
+function loop(ts){const now=ts/1000,dt=last?Math.min(.1,now-last):0;last=now;t+=dt*speed;if(t>=STEP+1)t=0;ph+=dt;
+  const tt=Math.min(t,STEP);document.getElementById('sgInfo').textContent=tt.toFixed(1)+' / '+STEP+' s  ·  '+FQ+' Hz → '+CYC+' journeys';document.getElementById('sgPg').style.width=(tt/STEP*100)+'%';
+  spectrum(ph);draw(Math.min(t,STEP-.001),now);if(vis)requestAnimationFrame(loop);else{running=false;last=0}}
+let vis=false,running=false;new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis&&!running){running=true;requestAnimationFrame(loop)}}).observe(sp.closest('.sig'));
+
+  })();
 })();
