@@ -63,7 +63,8 @@
       var list = visible().filter(function (i) { return i.cat === c.k; }).concat(movedItems(c.k));
       var f = el('div', 'wnF' + (open[c.k] ? ' o' : ''));
       var cnt = list.filter(function (i) { return i.show !== false && (i.lang === l || i.lang === 'both'); }).length;
-      var hb = el('button', '', folder(c.c) + '<span class="nm">' + c[l] + '</span><span class="ct">' + (ar ? AD(cnt) : cnt) + '</span><span class="chev">›</span>');
+      var nnew = list.filter(function (i) { return i.show !== false && i.isNew && !i.virtual && i.lang === l; }).length;
+      var hb = el('button', '', folder(c.c) + '<span class="nm">' + c[l] + '</span>' + (nnew ? '<b class="fNew" title="NEW">' + (ar ? AD(nnew) : nnew) + '</b>' : '') + '<span class="ct">' + (ar ? AD(cnt) : cnt) + '</span><span class="chev">›</span>');
       hb.type = 'button'; hb.onclick = function () { open[c.k] = !open[c.k]; render(); };
       f.appendChild(hb);
       var cols = el('div', 'wnCols');
