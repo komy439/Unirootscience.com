@@ -13,7 +13,8 @@
    "poster": "videos/integrated-network-ar.jpg",
    "date": "2026-11-15",
    "show": true,
-   "isNew": true
+   "isNew": true,
+   "pin": true
   },
   {
    "id": "v2-en",
@@ -27,7 +28,8 @@
    "poster": "videos/integrated-network-en.jpg",
    "date": "2026-11-15",
    "show": true,
-   "isNew": true
+   "isNew": true,
+   "pin": true
   },
   {
    "id": "v1-ar",
@@ -41,7 +43,8 @@
    "poster": "videos/beyond-measurement-ar.jpg",
    "date": "2026-11-15",
    "show": true,
-   "isNew": true
+   "isNew": true,
+   "pin": true
   },
   {
    "id": "v1-en",
@@ -55,7 +58,8 @@
    "poster": "videos/beyond-measurement-en.jpg",
    "date": "2026-11-15",
    "show": true,
-   "isNew": true
+   "isNew": true,
+   "pin": true
   },
   {
    "id": "b1-ar",
@@ -291,5 +295,6 @@
    "show": false,
    "isNew": false
   }
- ]
+ ],
+ "moved": {}
 }

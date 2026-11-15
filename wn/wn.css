@@ -106,3 +106,29 @@ html[lang=ar] .wnBar label{font:700 13px Ami,serif}
 .urp .knob{position:absolute;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;border-radius:50%;background:#fff3d0;box-shadow:0 0 8px rgba(243,207,122,.9)}
 .urp .tm{font:500 12px ui-monospace,monospace;color:#f3e6c4;min-width:92px;text-align:center}
 @media (max-width:560px){.wnBtn{top:58px}.urp .tm{min-width:0;font-size:11px}}
+/* pinned items shown on the page, inside their category band */
+.wnPin{max-width:1160px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:22px}
+.wnPin:not(:empty){padding-top:30px;padding-bottom:70px}
+.wnPin .pc{border:1px solid #2a2218;border-radius:16px;background:#0f0d0a;padding:16px;position:relative}
+.wnPin .pc.wide{grid-column:1/-1}
+.wnPin .pc h4{margin:0 0 6px;color:#f3cf7a;font:600 19px/1.4 Poppins,sans-serif}
+.wnPin .pc.ar{direction:rtl}.wnPin .pc.ar h4{font:700 23px/1.5 Ami,serif}
+.wnPin .pc p{margin:0;color:#b9b09a;font:400 14.5px/1.7 Poppins,sans-serif;white-space:pre-wrap}
+.wnPin .pc.ar p{font:400 17px/1.8 Ami,serif}
+.wnPin .pc img{width:100%;border-radius:10px;margin:8px 0}
+.wnPin .pc .go{display:inline-block;margin-top:10px;background:#1a150d;border:1px solid #6b5326;color:#f3cf7a;border-radius:8px;padding:7px 14px;font:600 13px Poppins,sans-serif;cursor:pointer;text-decoration:none}
+.wnPin .pc.ar .go{font:700 15px Ami,serif}
+.wnPin .pc .unpin{position:absolute;top:10px;inset-inline-end:10px;display:none;background:#17130d;border:1px solid #6b5326;color:#f3cf7a;border-radius:8px;padding:4px 9px;font:600 12px Poppins,sans-serif;cursor:pointer}
+html.own .wnPin .pc .unpin{display:block}
+/* owner: move a page section into a folder */
+.wnSec{display:none;position:absolute;top:18px;inset-inline-end:20px;z-index:5;background:rgba(16,14,10,.9);border:1px solid #6b5326;color:#f3cf7a;border-radius:999px;padding:6px 14px;font:600 12px Poppins,sans-serif;cursor:pointer}
+html[lang=ar] .wnSec{font:700 14px Ami,serif}
+html.own .wnSec{display:block}
+.wnPick{display:none;position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.7);align-items:center;justify-content:center;padding:16px}
+.wnPick.on{display:flex}
+.wnPick .bx{background:#120f0b;border:1px solid #3a2f1e;border-radius:14px;padding:16px;display:grid;gap:8px;min-width:260px}
+.wnPick .bx b{color:#d9c9a3;font:600 13px Poppins,sans-serif}
+html[lang=ar] .wnPick .bx b{font:700 16px Ami,serif}
+.wnPick .bx button{background:#1a150d;border:1px solid #6b5326;color:#f3cf7a;border-radius:9px;padding:9px 14px;font:600 14px Poppins,sans-serif;cursor:pointer;text-align:start}
+html[lang=ar] .wnPick .bx button{font:700 16px Ami,serif}
+.wnI.sec .ty{background:#241b0f}
