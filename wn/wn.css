@@ -145,7 +145,7 @@ section .fbBar{margin-top:30px}
 .fbBar[dir=rtl] .fbCm i{font:700 15px Ami,serif}
 .fbBox{flex-basis:100%;border:1px solid #2a2218;border-radius:12px;background:#0f0d0a;padding:12px;display:grid;gap:8px}
 .fbBox[hidden]{display:none}
-.fbP{margin:0;color:#a8926b;font-size:12px}.fbBar[dir=rtl] .fbP{font:400 14px Ami,serif}
+.fbP{margin:0;color:#a8926b;font-size:12px;line-height:1.7}.fbBar[dir=rtl] .fbP{font:400 14px Ami,serif}
 .fbBox textarea,.fbBox input{width:100%;box-sizing:border-box;background:#0a0908;border:1px solid #3a2f1e;color:#efe8d6;border-radius:8px;padding:9px;font:14px Poppins,system-ui,sans-serif}
 .fbBar[dir=rtl] .fbBox textarea,.fbBar[dir=rtl] .fbBox .nm{font:16px Ami,serif}
 .fbBox textarea{min-height:76px;resize:vertical}

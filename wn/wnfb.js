@@ -24,7 +24,8 @@ const T = {
   ph: ['Your comment… only you and uni root can see it.', 'تعليقك… لا يراه غيرك أنت وuni root.'], name: ['Name (optional)', 'الاسم (اختياري)'],
   email: ['Email, if you want a reply by email (optional)', 'الإيميل لو حابب ردًّا عليه (اختياري)'], yours: ['Your comments', 'تعليقاتك'],
   reply: ['uni root replied', 'ردّ uni root'], sent: ['Sent ✓', 'تم الإرسال ✓'], err: ['Could not send. Try again.', 'تعذّر الإرسال. حاول مرة أخرى.'],
-  private: ['Private: only you and uni root see your comments.', 'خاص: تعليقاتك لا يراها غيرك أنت وuni root.']
+  private: ['Private: only you and uni root see your comments.', 'خاص: تعليقاتك لا يراها غيرك أنت وuni root.'],
+  where: ['The reply appears here, under your comment, when you come back from this same device and browser. Add your email if you would like the reply by email too.', 'الرد يظهر هنا تحت تعليقك حين تعود من نفس الجهاز ونفس المتصفح. أضف إيميلك إن أردت أن يصلك الرد عليه أيضًا.']
 };
 const t = (k, l) => T[k][l === 'ar' ? 1 : 0];
 
@@ -75,7 +76,7 @@ async function box(b) {
   const l = lang(b), x = b.querySelector('.fbBox');
   if (!x.dataset.on) {
     x.dataset.on = '1';
-    x.innerHTML = '<p class="fbP">🔒 ' + t('private', l) + '</p><textarea maxlength="2000"></textarea><div class="fbR"><input class="nm" maxlength="80"><input class="em" type="email" maxlength="120" dir="ltr"></div><div class="fbS"><button type="button" class="fbGo"></button><span></span></div><div class="fbMine"></div>';
+    x.innerHTML = '<p class="fbP">🔒 ' + t('private', l) + '<br>↩ ' + t('where', l) + '</p><textarea maxlength="2000"></textarea><div class="fbR"><input class="nm" maxlength="80"><input class="em" type="email" maxlength="120" dir="ltr"></div><div class="fbS"><button type="button" class="fbGo"></button><span></span></div><div class="fbMine"></div>';
     x.querySelector('textarea').placeholder = t('ph', l); x.querySelector('.nm').placeholder = t('name', l); x.querySelector('.em').placeholder = t('email', l);
     x.querySelector('.fbGo').textContent = t('send', l);
     x.querySelector('.fbGo').onclick = () => send(b);
