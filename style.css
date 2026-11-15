@@ -330,3 +330,7 @@ html[lang=ar] .lbT h3{font:700 23px Ami,serif}
 .lbT p{margin:0 0 14px;color:#a8a08c;font-size:14.5px}html[lang=ar] .lbT p{font:400 17px Ami,serif}
 .lbB{display:flex;gap:10px;flex-wrap:wrap}.lbB .btn{padding:8px 16px;font-size:13px}
 html[lang=ar] .lbW.en-only,html:not([lang=ar]) .lbW.ar-only{display:none!important}
+
+/* contact: WhatsApp, Gmail, email app, copy, phone */
+.btn .ic,.ctI .ic{width:20px;height:20px;vertical-align:-5px;margin-inline-end:8px;flex:none}.ctB .btn{display:inline-flex;align-items:center;font-family:inherit;cursor:pointer}.ctB button.btn{font-size:15px;color:#fff}.ctMail{margin:14px 0 0;color:#a8926b;font-size:14px;letter-spacing:.04em;text-align:center;user-select:all}.ctI{display:inline-flex;align-items:center;gap:0}.ctI .ic{width:16px;height:16px;vertical-align:-3px;margin-inline-end:6px}
+footer .ct{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 10px}
