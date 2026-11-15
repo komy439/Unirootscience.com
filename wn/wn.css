@@ -1,0 +1,81 @@
+/* What's new + Categories */
+.wnBtn{position:fixed;z-index:31;top:64px;inset-inline-end:max(20px,calc((100vw - 1160px)/2 + 20px));display:inline-flex;align-items:center;gap:7px;padding:5px 12px 5px 8px;border-radius:999px;border:1px solid rgba(243,207,122,.45);background:rgba(16,14,10,.78);backdrop-filter:blur(10px);color:#f3e6c4;font:600 11.5px Poppins,system-ui,sans-serif;letter-spacing:.05em;cursor:pointer}
+.wnBtn i{display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#f3cf7a;color:#1a1408;font:700 12px Poppins,sans-serif;font-style:normal}
+.wnBtn b{display:none;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#ff7a3a;color:#fff;font:700 10px/16px Poppins,sans-serif;text-align:center}
+.wnBtn.has b{display:inline-block}
+html[lang=ar] .wnBtn{font-family:Ami,serif;font-size:14px;letter-spacing:0}
+.wnShade{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .25s}
+.wnPanel{position:fixed;z-index:41;top:0;bottom:0;inset-inline-end:0;width:min(420px,100vw);background:#0c0b09;border-inline-start:1px solid #2a2218;transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column}
+html[dir=rtl] .wnPanel{transform:translateX(-100%)}
+.wnOpen .wnShade{opacity:1;pointer-events:auto}.wnOpen .wnPanel{transform:none!important}
+.wnHead{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 10px}
+.wnHead h3{margin:0;font:600 17px Poppins,sans-serif;color:#f3cf7a;letter-spacing:.03em}
+html[lang=ar] .wnHead h3{font:700 20px Ami,serif}
+.wnX{background:none;border:1px solid #3a2f1e;color:#e9e4d8;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer}
+.wnBody{overflow:auto;padding:0 18px 24px;flex:1}
+.wnLatest{margin:0 0 18px;padding:12px 14px;border:1px solid #2a2218;border-radius:12px;background:#120f0b}
+.wnLatest small{display:block;color:#a8926b;font:600 10.5px Poppins,sans-serif;letter-spacing:.14em;margin-bottom:4px}
+.wnCatT{font:600 10.5px Poppins,sans-serif;letter-spacing:.18em;color:#8c8270;margin:6px 0 8px;text-transform:uppercase}
+html[lang=ar] .wnCatT{font:700 14px Ami,serif;letter-spacing:0}
+.wnF{border:1px solid #2a2218;border-radius:12px;margin-bottom:8px;background:#0f0d0a;overflow:hidden}
+.wnF>button{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer}
+.wnF svg{width:26px;height:22px;flex:none}
+.wnF .nm{flex:1;font:600 15px Poppins,sans-serif;color:#f1ead8}
+html[lang=ar] .wnF .nm{font:700 17px Ami,serif}
+.wnF .ct{font:600 11px ui-monospace,monospace;color:#a8926b}
+.wnF .ar{color:#6d6250;transition:transform .2s}
+.wnF.o .ar{transform:rotate(90deg)}
+html[dir=rtl] .wnF .ar{transform:scaleX(-1)}html[dir=rtl] .wnF.o .ar{transform:rotate(90deg)}
+.wnL{display:none;padding:0 10px 10px}
+.wnF.o .wnL{display:block}
+.wnI{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:9px;cursor:pointer}
+.wnI:hover{background:#17130d}
+.wnI .ty{flex:none;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:#1c170f;color:#f3cf7a;font-size:14px}
+.wnI .tx{flex:1;min-width:0}
+.wnI .tt{font:500 14px/1.45 Poppins,sans-serif;color:#efe8d6}
+html[lang=ar] .wnI .tt{font:700 16px/1.5 Ami,serif}
+.wnI .sb{font:400 12.5px/1.5 Poppins,sans-serif;color:#9a927f;margin-top:2px}
+html[lang=ar] .wnI .sb{font:400 14px/1.6 Ami,serif}
+.wnI .dt{font:500 10.5px ui-monospace,monospace;color:#6d6250;margin-top:3px}
+.wnI .nw{display:inline-block;margin-inline-start:6px;padding:0 6px;border-radius:5px;background:#ff7a3a;color:#fff;font:700 9.5px/16px Poppins,sans-serif;vertical-align:2px}
+.wnI.hid{opacity:.35}
+.wnEmpty{color:#6d6250;font-size:13px;padding:6px 12px}
+/* owner tools */
+.wnOwn{display:none}
+.wnOwner .wnOwn{display:flex}
+.wnTools{gap:4px;flex:none}
+.wnTools button{background:#17130d;border:1px solid #33291b;color:#d9c9a3;border-radius:7px;width:28px;height:28px;cursor:pointer;font-size:13px;padding:0}
+.wnAdd{margin:4px 10px 4px;gap:8px}
+.wnAdd button,.wnBar button{background:#1a150d;border:1px solid #6b5326;color:#f3cf7a;border-radius:8px;padding:6px 12px;font:600 12px Poppins,sans-serif;cursor:pointer}
+.wnBar{position:sticky;bottom:0;gap:8px;flex-wrap:wrap;padding:12px 18px;border-top:1px solid #2a2218;background:#0c0b09;align-items:center}
+.wnBar span{font:600 11px Poppins,sans-serif;color:#a8926b;flex:1}
+.wnForm{display:none;position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.7);align-items:center;justify-content:center;padding:16px}
+.wnForm.on{display:flex}
+.wnForm form{width:min(460px,100%);max-height:90vh;overflow:auto;background:#120f0b;border:1px solid #3a2f1e;border-radius:14px;padding:16px;display:grid;gap:8px}
+.wnForm label{font:600 11px Poppins,sans-serif;color:#a8926b;letter-spacing:.06em}
+.wnForm input,.wnForm select,.wnForm textarea{width:100%;box-sizing:border-box;background:#0a0908;border:1px solid #3a2f1e;color:#efe8d6;border-radius:8px;padding:8px;font:14px Poppins,system-ui,sans-serif}
+.wnForm textarea{min-height:56px}
+.wnForm .r{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+.wnForm .r button{background:#1a150d;border:1px solid #6b5326;color:#f3cf7a;border-radius:8px;padding:7px 14px;font:600 13px Poppins,sans-serif;cursor:pointer}
+.wnForm .r button.p{background:#f3cf7a;color:#1a1408}
+.wnView{display:none;position:fixed;inset:0;z-index:52;background:rgba(0,0,0,.75);align-items:center;justify-content:center;padding:16px}
+.wnView.on{display:flex}
+.wnView .bx{width:min(640px,100%);max-height:88vh;overflow:auto;background:#0f0d0a;border:1px solid #3a2f1e;border-radius:16px;padding:20px 22px}
+.wnView h4{margin:0 0 6px;color:#f3cf7a;font:600 19px/1.4 Poppins,sans-serif}
+html[lang=ar] .wnView h4{font:700 22px/1.5 Ami,serif}
+.wnView .tx{color:#d9d2c0;font-size:15px;line-height:1.8;white-space:pre-wrap}
+html[lang=ar] .wnView .tx{font:400 17px/1.9 Ami,serif}
+.wnView img,.wnView iframe{width:100%;border:0;border-radius:10px;margin:10px 0;aspect-ratio:16/9;height:auto}
+.wnView img{aspect-ratio:auto}
+.wnView .r{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+.wnView .r a,.wnView .r button{background:#1a150d;border:1px solid #6b5326;color:#f3cf7a;border-radius:8px;padding:7px 14px;font:600 13px Poppins,sans-serif;cursor:pointer;text-decoration:none}
+@media (max-width:560px){.wnBtn{top:58px}}
+.wnOwner .wnI{flex-wrap:wrap}.wnOwner .wnTools{width:100%;padding-inline-start:40px}
+
+/* button v2: text, then ? circle, then count badge */
+.wnBtn{gap:6px;padding:5px 6px 5px 13px;font-size:12px}
+html[dir=rtl] .wnBtn{padding:5px 13px 5px 6px}
+.wnBtn i{width:21px;height:21px;font-size:13px;line-height:1}
+.wnBtn b{min-width:21px;height:21px;padding:0 5px;box-sizing:border-box;font:700 11.5px/1 Poppins,sans-serif;align-items:center;justify-content:center;background:#e8432e}
+.wnBtn.has b{display:inline-flex}
+html[lang=ar] .wnBtn i{font:700 15px/1 Ami,serif;padding-bottom:2px}html[lang=ar] .wnBtn b{font:700 13px/1 Ami,serif;padding-bottom:2px}
