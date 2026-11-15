@@ -134,6 +134,7 @@
   }
   function fbKey(i) { return String(i.id || i.ref || '').replace(/-(ar|en)$/, ''); }
   function fbBar(key, title, lang) { var d = el('div', 'fbBar'); d.dataset.key = key; d.dataset.title = title; if (lang) d.dataset.lang = lang; return d; }
+  window.URP = function (src, poster) { return player(src, poster); };
   function closeView() { var v = view.querySelector('video'); if (v) v.pause(); view.classList.remove('on'); view.innerHTML = ''; }
   function show(i) {
     if ((i.type === 'article' || i.type === 'section') && i.ref) { var b = document.querySelector('[data-art="' + i.ref + '"]'); if (b) { close(); b.click(); return; } }
