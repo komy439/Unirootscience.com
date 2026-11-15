@@ -2,6 +2,34 @@
  "badge": null,
  "items": [
   {
+   "id": "v2-ar",
+   "cat": "bio",
+   "lang": "ar",
+   "type": "video",
+   "title": "الشبكة المتكاملة",
+   "sub": "الجسم كنظامٍ واحد.",
+   "text": "",
+   "ref": "videos/integrated-network-ar.mp4",
+   "poster": "videos/integrated-network-ar.jpg",
+   "date": "2026-11-15",
+   "show": true,
+   "isNew": true
+  },
+  {
+   "id": "v2-en",
+   "cat": "bio",
+   "lang": "en",
+   "type": "video",
+   "title": "The Integrated Network",
+   "sub": "The body as one system.",
+   "text": "",
+   "ref": "videos/integrated-network-en.mp4",
+   "poster": "videos/integrated-network-en.jpg",
+   "date": "2026-11-15",
+   "show": true,
+   "isNew": true
+  },
+  {
    "id": "v1-ar",
    "cat": "math",
    "lang": "ar",
