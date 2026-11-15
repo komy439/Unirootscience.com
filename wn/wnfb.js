@@ -22,10 +22,10 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&am
 const T = {
   like: ['Like', 'إعجاب'], comment: ['Leave a comment', 'اترك تعليقًا'], send: ['Send', 'إرسال'], sending: ['Sending…', 'جارٍ الإرسال…'],
   ph: ['Your comment… only you and uni root can see it.', 'تعليقك… لا يراه غيرك أنت وuni root.'], name: ['Name (optional)', 'الاسم (اختياري)'],
-  email: ['Email, if you want a reply by email (optional)', 'الإيميل لو حابب ردًّا عليه (اختياري)'], yours: ['Your comments', 'تعليقاتك'],
+  email: ['Contact method for a reply: email or WhatsApp (optional)', 'وسيلة التواصل للرد: إيميل أو واتساب (اختياري)'], yours: ['Your comments', 'تعليقاتك'],
   reply: ['uni root replied', 'ردّ uni root'], sent: ['Sent ✓', 'تم الإرسال ✓'], err: ['Could not send. Try again.', 'تعذّر الإرسال. حاول مرة أخرى.'],
   private: ['Private: only you and uni root see your comments.', 'خاص: تعليقاتك لا يراها غيرك أنت وuni root.'],
-  where: ['The reply appears here, under your comment, when you come back from this same device and browser. Add your email if you would like the reply by email too.', 'الرد يظهر هنا تحت تعليقك حين تعود من نفس الجهاز ونفس المتصفح. أضف إيميلك إن أردت أن يصلك الرد عليه أيضًا.']
+  where: ['You will not get notifications from the site. Replies are given on request: they appear here, under your comment, when you come back from this same device and browser, or through the contact method you add below.', 'لن تصلك إشعارات من الموقع. والرد حسب الطلب: يظهر هنا تحت تعليقك حين تعود من نفس الجهاز ونفس المتصفح، أو عبر وسيلة التواصل التي تحددها بالأسفل.']
 };
 const t = (k, l) => T[k][l === 'ar' ? 1 : 0];
 
@@ -76,7 +76,7 @@ async function box(b) {
   const l = lang(b), x = b.querySelector('.fbBox');
   if (!x.dataset.on) {
     x.dataset.on = '1';
-    x.innerHTML = '<p class="fbP">🔒 ' + t('private', l) + '<br>↩ ' + t('where', l) + '</p><textarea maxlength="2000"></textarea><div class="fbR"><input class="nm" maxlength="80"><input class="em" type="email" maxlength="120" dir="ltr"></div><div class="fbS"><button type="button" class="fbGo"></button><span></span></div><div class="fbMine"></div>';
+    x.innerHTML = '<p class="fbP">🔒 ' + t('private', l) + '<br>↩ ' + t('where', l) + '</p><textarea maxlength="2000"></textarea><div class="fbR"><input class="nm" maxlength="80"><input class="em" maxlength="120" dir="ltr"></div><div class="fbS"><button type="button" class="fbGo"></button><span></span></div><div class="fbMine"></div>';
     x.querySelector('textarea').placeholder = t('ph', l); x.querySelector('.nm').placeholder = t('name', l); x.querySelector('.em').placeholder = t('email', l);
     x.querySelector('.fbGo').textContent = t('send', l);
     x.querySelector('.fbGo').onclick = () => send(b);
@@ -131,7 +131,7 @@ async function openInbox() {
     ls.innerHTML = '';
     s.docs.forEach(d => {
       const c = d.data(), el = document.createElement('div'); el.className = 'it' + (c.reply ? '' : ' new'); el.dir = c.lang === 'ar' ? 'rtl' : 'ltr';
-      el.innerHTML = '<div class="mt"><b>' + esc(c.title) + '</b><span>' + esc(c.name || (ar ? 'بدون اسم' : 'No name')) + (c.email ? ' · <a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>' : '') + ' · ' + when(c.ts, c.lang) + '</span></div><p>' + esc(c.text) + '</p><textarea placeholder="' + (ar ? 'ردّك…' : 'Your reply…') + '">' + esc(c.reply || '') + '</textarea><div class="ac"><button type="button" class="sv">' + (ar ? 'حفظ الرد' : 'Save reply') + '</button><button type="button" class="dl">🗑</button><span></span></div>';
+      el.innerHTML = '<div class="mt"><b>' + esc(c.title) + '</b><span>' + esc(c.name || (ar ? 'بدون اسم' : 'No name')) + (c.email ? ' · ' + (/@/.test(c.email) ? '<a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>' : /^[+\d\s-]{7,}$/.test(c.email) ? '<a href="https://wa.me/' + esc(c.email.replace(/[^\d]/g, '').replace(/^0/, '20')) + '" target="_blank" rel="noopener">WhatsApp ' + esc(c.email) + '</a>' : esc(c.email)) : '') + ' · ' + when(c.ts, c.lang) + '</span></div><p>' + esc(c.text) + '</p><textarea placeholder="' + (ar ? 'ردّك…' : 'Your reply…') + '">' + esc(c.reply || '') + '</textarea><div class="ac"><button type="button" class="sv">' + (ar ? 'حفظ الرد' : 'Save reply') + '</button><button type="button" class="dl">🗑</button><span></span></div>';
       el.querySelector('.sv').onclick = async () => { const r = el.querySelector('textarea').value.trim(), sp = el.querySelector('.ac span'); try { await updateDoc(d.ref, { reply: r, replyTs: serverTimestamp() }); sp.textContent = '✓'; el.classList.toggle('new', !r); updateOwner(); } catch (e) { sp.textContent = e.code || 'error'; } };
       el.querySelector('.dl').onclick = async () => { try { await deleteDoc(d.ref); el.remove(); updateOwner(); } catch (e) {} };
       ls.appendChild(el);
