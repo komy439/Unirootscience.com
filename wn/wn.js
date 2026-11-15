@@ -20,7 +20,7 @@
   var shade = el('div', 'wnShade'), panel = el('aside', 'wnPanel'), form = el('div', 'wnForm'), view = el('div', 'wnView');
   panel.setAttribute('aria-label', "What's new");
   panel.innerHTML = '<div class="wnHead"><h3></h3><button type="button" class="wnX" aria-label="Close">×</button></div><div class="wnBody"></div>' +
-    '<div class="wnBar wnOwn"><span></span><button type="button" data-a="copy">Copy content</button><button type="button" data-a="reset">Reset</button></div>';
+    '<div class="wnBar wnOwn"><span></span><button type="button" data-a="pub" class="pub">Publish</button><button type="button" data-a="copy">Copy</button><button type="button" data-a="reset">Reset</button></div>';
   var body = panel.querySelector('.wnBody');
 
   function save() { try { localStorage.setItem(DK, JSON.stringify(items)); } catch (e) {} }
@@ -32,7 +32,7 @@
     btn.classList.toggle('has', nNew > 0); btn.querySelector('b').textContent = l === 'ar' ? String(nNew).replace(/\d/g, function (d) { return '٠١٢٣٤٥٦٧٨٩'[d]; }) : nNew;
     panel.querySelector('h3').textContent = l === 'ar' ? 'ما الجديد؟' : "What's new?";
     panel.classList.toggle('wnOwner', own());
-    panel.querySelector('.wnBar span').textContent = l === 'ar' ? 'وضع المالك' : 'Owner mode';
+    var sp = panel.querySelector('.wnBar span'); if (!sp.style.color) sp.textContent = l === 'ar' ? 'وضع المالك' : 'Owner mode'; panel.querySelector('[data-a=pub]').textContent = l === 'ar' ? 'نشر' : 'Publish'; panel.querySelector('[data-a=copy]').textContent = l === 'ar' ? 'نسخ' : 'Copy'; panel.querySelector('[data-a=reset]').textContent = l === 'ar' ? 'استرجاع المنشور' : 'Reset';
     body.innerHTML = '';
     var latest = items.filter(function (i) { return i.show !== false; }).sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); })[0];
     if (latest) {
@@ -110,13 +110,43 @@
     var s = JSON.stringify(items, null, 1);
     (navigator.clipboard ? navigator.clipboard.writeText(s) : Promise.reject()).then(function () { alert('Copied. Send it to publish.'); }, function () { prompt('Copy this:', s); });
   };
+
+  // Publish: writes wn/content.json to the site repo with the owner's GitHub token (kept only in this browser).
+  var REPO = 'komy439/Unirootscience.com', TK = 'uniroot_wn_token', PATH = 'wn/content.json';
+  function b64(s) { return btoa(unescape(encodeURIComponent(s))); }
+  function tokenForm(done) {
+    form.innerHTML = '<form><label>GitHub token (saved on this device only)</label><input name="t" autocomplete="off" placeholder="github_pat_..."><div class="r"><button type="button" data-c>Cancel</button><button class="p">Save</button></div></form>';
+    form.classList.add('on');
+    form.querySelector('[data-c]').onclick = function () { form.classList.remove('on'); };
+    form.querySelector('form').onsubmit = function (e) { e.preventDefault(); var t = new FormData(e.target).get('t').trim(); if (!t) return; try { localStorage.setItem(TK, t); } catch (x) {} form.classList.remove('on'); done(t); };
+  }
+  function status(msg, ok) { var sp = panel.querySelector('.wnBar span'); sp.textContent = msg; sp.style.color = ok === false ? '#ff7a6b' : ok ? '#8fe08a' : ''; }
+  function publish(t) {
+    var ar = L() === 'ar', H = { Authorization: 'Bearer ' + t, Accept: 'application/vnd.github+json' }, url = 'https://api.github.com/repos/' + REPO + '/contents/' + PATH;
+    status(ar ? 'جارٍ النشر…' : 'Publishing…');
+    fetch(url + '?ref=main&t=' + Date.now(), { headers: H, cache: 'no-store' }).then(function (r) {
+      if (r.status === 401 || r.status === 403) throw 'auth'; return r.ok ? r.json() : {};
+    }).then(function (cur) {
+      return fetch(url, { method: 'PUT', headers: H, body: JSON.stringify({ message: 'Update What\'s new content', content: b64(JSON.stringify(items, null, 1) + '\n'), sha: cur.sha, branch: 'main' }) });
+    }).then(function (r) {
+      if (r.status === 401 || r.status === 403) throw 'auth'; if (!r.ok) throw 'http ' + r.status;
+      status(ar ? 'تم النشر ✓ يظهر للناس خلال دقيقة أو اثنتين' : 'Published ✓ live in 1–2 minutes', true);
+    }).catch(function (e) {
+      if (e === 'auth') { try { localStorage.removeItem(TK); } catch (x) {} status(ar ? 'المفتاح غير صالح، أدخله من جديد' : 'Token rejected, enter it again', false); return; }
+      status((ar ? 'لم يتم النشر: ' : 'Not published: ') + e, false);
+    });
+  }
+  panel.querySelector('[data-a=pub]').onclick = function () {
+    var t = null; try { t = localStorage.getItem(TK); } catch (x) {}
+    if (t) publish(t); else tokenForm(publish);
+  };
   panel.querySelector('[data-a=reset]').onclick = function () { try { localStorage.removeItem(DK); } catch (e) {} load(); };
 
   function load() {
     var draft = null; try { draft = own() && JSON.parse(localStorage.getItem(DK) || 'null'); } catch (e) {}
     if (draft) { items = draft; render(); return; }
     if (window.WN_DATA) { items = JSON.parse(JSON.stringify(window.WN_DATA)); render(); return; }
-    fetch('wn/content.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (d) { items = d; render(); }).catch(function () { items = []; render(); });
+    fetch('wn/content.json?v=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) { items = d; render(); }).catch(function () { items = []; render(); });
   }
   document.addEventListener('DOMContentLoaded', function () {
     [btn, shade, panel, form, view].forEach(function (e) { document.body.appendChild(e); });

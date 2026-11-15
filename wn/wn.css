@@ -79,3 +79,4 @@ html[dir=rtl] .wnBtn{padding:5px 13px 5px 6px}
 .wnBtn b{min-width:21px;height:21px;padding:0 5px;box-sizing:border-box;font:700 11.5px/1 Poppins,sans-serif;align-items:center;justify-content:center;background:#e8432e}
 .wnBtn.has b{display:inline-flex}
 html[lang=ar] .wnBtn i{font:700 15px/1 Ami,serif;padding-bottom:2px}html[lang=ar] .wnBtn b{font:700 13px/1 Ami,serif;padding-bottom:2px}
+.wnBar button.pub{background:#f3cf7a;color:#1a1408;border-color:#f3cf7a}
