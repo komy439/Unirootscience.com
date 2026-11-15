@@ -132,3 +132,53 @@ html[lang=ar] .wnPick .bx b{font:700 16px Ami,serif}
 .wnPick .bx button{background:#1a150d;border:1px solid #6b5326;color:#f3cf7a;border-radius:9px;padding:9px 14px;font:600 14px Poppins,sans-serif;cursor:pointer;text-align:start}
 html[lang=ar] .wnPick .bx button{font:700 16px Ami,serif}
 .wnI.sec .ty{background:#241b0f}
+/* likes + private comments */
+.fbBar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px;font:500 13px Poppins,system-ui,sans-serif}
+section .fbBar{margin-top:30px}
+.fbBar>button{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:999px;border:1px solid rgba(243,207,122,.35);background:rgba(20,17,11,.7);color:#e9dcb8}
+.fbBar>button:hover{border-color:#f3cf7a}
+.fbBar .hrt{color:#f3cf7a;font-size:16px;line-height:1}
+.fbLike[aria-pressed=true]{background:rgba(243,207,122,.14);border-color:#f3cf7a}
+.fbLike b{font:600 13px ui-monospace,monospace;color:#fff3d0}
+.fbBar[dir=rtl] .fbLike b{font:700 15px Ami,serif}
+.fbCm i{font-style:normal}
+.fbBar[dir=rtl] .fbCm i{font:700 15px Ami,serif}
+.fbBox{flex-basis:100%;border:1px solid #2a2218;border-radius:12px;background:#0f0d0a;padding:12px;display:grid;gap:8px}
+.fbBox[hidden]{display:none}
+.fbP{margin:0;color:#a8926b;font-size:12px}.fbBar[dir=rtl] .fbP{font:400 14px Ami,serif}
+.fbBox textarea,.fbBox input{width:100%;box-sizing:border-box;background:#0a0908;border:1px solid #3a2f1e;color:#efe8d6;border-radius:8px;padding:9px;font:14px Poppins,system-ui,sans-serif}
+.fbBar[dir=rtl] .fbBox textarea,.fbBar[dir=rtl] .fbBox .nm{font:16px Ami,serif}
+.fbBox textarea{min-height:76px;resize:vertical}
+.fbR{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media (max-width:560px){.fbR{grid-template-columns:1fr}}
+.fbS{display:flex;align-items:center;gap:10px}
+.fbS .fbGo{background:#f3cf7a;color:#1a1408;border:0;border-radius:8px;padding:8px 18px;font:600 13px Poppins,sans-serif;cursor:pointer}
+.fbBar[dir=rtl] .fbS .fbGo{font:700 15px Ami,serif}
+.fbS span{color:#8fe08a;font-size:12.5px}
+.fbMine h6{margin:6px 0 4px;color:#a8926b;font:600 11px Poppins,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.fbBar[dir=rtl] .fbMine h6{font:700 14px Ami,serif;letter-spacing:0}
+.fbC{border-top:1px solid #241d13;padding:8px 0}
+.fbC p{margin:0;color:#d9d2c0;white-space:pre-wrap;font-size:14px}.fbBar[dir=rtl] .fbC p{font:400 16px/1.7 Ami,serif}
+.fbC small{color:#6d6250;font-size:11px}
+.fbRep{margin-top:6px;padding:8px 10px;border-inline-start:2px solid #f3cf7a;background:rgba(243,207,122,.06);border-radius:6px}
+.fbRep b{color:#f3cf7a;font-size:12px}.fbBar[dir=rtl] .fbRep b{font:700 14px Ami,serif}
+.fbIn{display:none;position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:14px}
+.fbIn.on{display:flex}
+.fbIn .bx{width:min(760px,100%);max-height:92vh;display:flex;flex-direction:column;background:#0f0d0a;border:1px solid #3a2f1e;border-radius:16px}
+.fbIn .hd{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #2a2218}
+.fbIn h4{margin:0;color:#f3cf7a;font:600 18px Poppins,sans-serif}.fbIn[dir=rtl] h4{font:700 21px Ami,serif}
+.fbIn .x{background:none;border:1px solid #3a2f1e;color:#e9e4d8;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer}
+.fbIn .ls{overflow:auto;padding:10px 16px;color:#a59f90}
+.fbIn .it{border:1px solid #2a2218;border-radius:12px;padding:12px;margin:8px 0}
+.fbIn .it.new{border-color:#e8432e}
+.fbIn .mt{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.fbIn .mt b{color:#f3cf7a;font:600 14px Poppins,sans-serif}
+.fbIn .mt span,.fbIn .mt a{color:#8c8270;font-size:12px}
+.fbIn .it p{margin:8px 0;color:#efe8d6;white-space:pre-wrap}
+.fbIn .it[dir=rtl] p{font:400 17px/1.7 Ami,serif}
+.fbIn textarea{width:100%;box-sizing:border-box;min-height:60px;background:#0a0908;border:1px solid #3a2f1e;color:#efe8d6;border-radius:8px;padding:8px;font:14px Poppins,system-ui,sans-serif}
+.fbIn .ac{display:flex;gap:8px;align-items:center;margin-top:6px}
+.fbIn .ac button,.fbIn .ft button{background:#1a150d;border:1px solid #6b5326;color:#f3cf7a;border-radius:8px;padding:6px 12px;font:600 12.5px Poppins,sans-serif;cursor:pointer}
+.fbIn .ac .sv{background:#f3cf7a;color:#1a1408}
+.fbIn .ac span{color:#8fe08a;font-size:12px}
+.fbIn .ft{padding:10px 16px;border-top:1px solid #2a2218}

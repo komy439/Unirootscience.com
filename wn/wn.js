@@ -35,7 +35,7 @@
   var shade = el('div', 'wnShade'), panel = el('aside', 'wnPanel'), form = el('div', 'wnForm'), view = el('div', 'wnView');
   panel.setAttribute('aria-label', "What's new");
   panel.innerHTML = '<div class="wnHead"><h3></h3><button type="button" class="wnX" aria-label="Close">×</button></div><div class="wnBody"></div>' +
-    '<div class="wnBar wnOwn"><span></span><label><i></i><b class="bl"></b><input type="number" min="0" max="99" inputmode="numeric"></label><button type="button" data-a="pub" class="pub">Publish</button><button type="button" data-a="copy">Copy</button><button type="button" data-a="reset">Reset</button></div>';
+    '<div class="wnBar wnOwn"><span></span><button type="button" data-a="inbox">💬</button><label><i></i><b class="bl"></b><input type="number" min="0" max="99" inputmode="numeric"></label><button type="button" data-a="pub" class="pub">Publish</button><button type="button" data-a="copy">Copy</button><button type="button" data-a="reset">Reset</button></div>';
   var body = panel.querySelector('.wnBody'), badgeIn = panel.querySelector('.wnBar input');
 
   function save() { try { localStorage.setItem(DK, JSON.stringify(data)); } catch (e) {} }
@@ -131,6 +131,8 @@
     w.querySelector('.fs').onclick = function () { var t = w.requestFullscreen ? w : v; if (document.fullscreenElement) document.exitFullscreen(); else if (t.requestFullscreen) t.requestFullscreen(); else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen(); };
     return w;
   }
+  function fbKey(i) { return String(i.id || i.ref || '').replace(/-(ar|en)$/, ''); }
+  function fbBar(key, title, lang) { var d = el('div', 'fbBar'); d.dataset.key = key; d.dataset.title = title; if (lang) d.dataset.lang = lang; return d; }
   function closeView() { var v = view.querySelector('video'); if (v) v.pause(); view.classList.remove('on'); view.innerHTML = ''; }
   function show(i) {
     if ((i.type === 'article' || i.type === 'section') && i.ref) { var b = document.querySelector('[data-art="' + i.ref + '"]'); if (b) { close(); b.click(); return; } }
@@ -140,6 +142,7 @@
     if (i.type === 'image' && i.ref) box.insertAdjacentHTML('beforeend', '<img src="' + esc(i.ref) + '" alt="">');
     if (i.type === 'video' && i.ref) { var e = yt(i.ref); if (e) box.insertAdjacentHTML('beforeend', '<iframe src="' + e + '" allowfullscreen></iframe>'); else box.appendChild(player(i.ref, i.poster)); }
     if (i.text || i.sub) box.appendChild(el('div', 'tx', esc(i.text || i.sub)));
+    if (i.id && i.type !== 'link') box.appendChild(fbBar(fbKey(i), i.title, i.lang));
     var r = el('div', 'r'), cb = el('button', '', ar ? 'إغلاق' : 'Close'); cb.type = 'button'; cb.onclick = closeView; r.appendChild(cb); box.appendChild(r);
     view.innerHTML = ''; view.appendChild(box); view.classList.add('on');
   }
@@ -188,6 +191,7 @@
     if (i.sub || i.text) c.appendChild(el('p', '', esc(i.type === 'note' ? (i.text || i.sub) : i.sub)));
     if (i.type === 'article' && i.ref) { var g = el('button', 'go', ar ? 'اقرأ المقال' : 'Read the article'); g.type = 'button'; g.onclick = function () { var b = document.querySelector('[data-art="' + i.ref + '"]'); if (b) b.click(); }; c.appendChild(g); }
     if (i.type === 'link' && i.ref) c.insertAdjacentHTML('beforeend', '<a class="go" href="' + esc(i.ref) + '" target="_blank" rel="noopener">' + (ar ? 'افتح' : 'Open') + ' ↗</a>');
+    if (i.id) c.appendChild(fbBar(fbKey(i), i.title, i.lang));
     var u = el('button', 'unpin', ar ? '📌 إلى الفولدر' : '📌 Back to folder'); u.type = 'button'; u.onclick = function () { i.pin = false; save(); render(); }; c.appendChild(u);
     return c;
   }
@@ -197,6 +201,7 @@
       var id = s.getAttribute('data-wn'); s.style.display = data.moved && data.moved[id] ? 'none' : '';
       if (!s.querySelector(':scope > .wnSec')) { var b = el('button', 'wnSec'); b.type = 'button'; b.onclick = function () { chooseFolder(id); }; s.appendChild(b); }
       s.querySelector(':scope > .wnSec').textContent = l === 'ar' ? '📁 إلى فولدر' : '📁 To a folder';
+      if (!s.querySelector('.fbBar')) { var wr = s.querySelector(':scope > .wrap') || s; wr.appendChild(fbBar('sec-' + id, s.getAttribute('data-wn-en') + ' · ' + s.getAttribute('data-wn-ar'))); }
     });
     document.querySelectorAll('.wnPin').forEach(function (box) {
       var cat = box.getAttribute('data-cat'); box.innerHTML = '';
