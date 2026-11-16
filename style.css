@@ -336,8 +336,12 @@ html[lang=ar] .lbW.en-only,html:not([lang=ar]) .lbW.ar-only{display:none!importa
 footer .ct{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 10px}
 
 /* the About link: a blue pill, so it reads as a page with more inside */
-nav a.navAbout{background:linear-gradient(180deg,#2f6fe0,#1d4fb3);color:#fff!important;border:1px solid #6fa3ff;border-radius:999px;padding:6px 14px!important;box-shadow:0 0 12px #3f7fff55}
-nav a.navAbout:hover{background:linear-gradient(180deg,#3d80f5,#2459c7)}
+nav a.navAbout{background:linear-gradient(180deg,#f7d98c,#e6b84f);color:#1a1408!important;border:1px solid #f3cf7a;border-radius:999px;padding:6px 14px!important;box-shadow:0 0 14px rgba(243,207,122,.35);font-weight:600}
+nav a.navAbout:hover{background:linear-gradient(180deg,#fde4a3,#efc463)}
 /* phones and tablets: the menu links are hidden, but the blue About pill stays */
 @media (max-width:1020px){nav a.navAbout{display:inline-flex!important;align-items:center;font-size:13px;margin-inline-end:6px;white-space:nowrap;padding:5px 11px!important}}
 nav a.navAbout{white-space:nowrap}
+
+/* About docks beside What's new: same row, same height, edges aligned (placed by lang.js) */
+nav a.navAbout.dock{position:fixed;z-index:31;display:inline-flex!important;align-items:center;box-sizing:border-box;margin:0!important;padding:0 15px!important;font-size:14px;line-height:1}
+html[lang=ar] nav a.navAbout.dock{font-family:Ami,serif;font-size:15px}

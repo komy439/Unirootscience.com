@@ -16,3 +16,11 @@
     document.querySelectorAll('[data-l]').forEach(function (b) { b.onclick = function () { set(b.dataset.l); }; });
   });
 })();
+
+// dock the About button beside the What's new button: same top, same height, its edge 8px from What's new
+(function(){var ro;function place(){var a=document.querySelector('nav a.navAbout'),w=document.querySelector('.wnBtn');if(!a||!w){setTimeout(place,200);return}
+ var r=w.getBoundingClientRect(),rtl=document.documentElement.dir==='rtl';a.classList.add('dock');a.style.top=r.top+'px';a.style.height=r.height+'px';
+ if(rtl){a.style.left=(r.right+8)+'px';a.style.right='auto'}else{a.style.right=(innerWidth-r.left+8)+'px';a.style.left='auto'}
+ if(!ro&&window.ResizeObserver){ro=new ResizeObserver(place);ro.observe(w)}}
+ addEventListener('resize',place);document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-l]'))setTimeout(place,80)});
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',place);else place();setTimeout(place,900);})();
