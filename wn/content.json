@@ -272,6 +272,36 @@
    "pin": true
   },
   {
+   "id": "pi9-ar",
+   "cat": "math",
+   "lang": "ar",
+   "type": "video",
+   "title": "لماذا π؟ · الجزء ٩ · لا سكون في الطبيعة",
+   "sub": "الواحد أصل… والاحتمال يبدأ من 2.",
+   "text": "",
+   "ref": "videos/why-pi-9-ar.mp4",
+   "poster": "videos/why-pi-9-ar.jpg",
+   "date": "2026-11-17",
+   "show": true,
+   "isNew": true,
+   "pin": true
+  },
+  {
+   "id": "pi9-en",
+   "cat": "math",
+   "lang": "en",
+   "type": "video",
+   "title": "Why π? · Part 9 · Nothing in nature is still",
+   "sub": "One is the origin… probability begins at 2.",
+   "text": "",
+   "ref": "videos/why-pi-9-en.mp4",
+   "poster": "videos/why-pi-9-en.jpg",
+   "date": "2026-11-17",
+   "show": true,
+   "isNew": true,
+   "pin": true
+  },
+  {
    "id": "pip-introduction-ar",
    "cat": "math",
    "lang": "ar",
