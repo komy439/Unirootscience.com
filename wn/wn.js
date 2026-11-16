@@ -115,8 +115,9 @@
   // gold player: thin yellow seek bar, play/pause, time, fullscreen
   function player(src, poster) {
     var w = el('div', 'urp');
-    w.innerHTML = '<video playsinline preload="metadata"' + (poster ? ' poster="' + esc(poster) + '"' : '') + ' src="' + esc(src) + '"></video><div class="big">' + PLAY + '</div>' +
+    w.innerHTML = '<video playsinline preload="metadata" controlslist="nodownload" disablepictureinpicture' + (poster ? ' poster="' + esc(poster) + '"' : '') + ' src="' + esc(src) + '"></video><div class="big">' + PLAY + '</div>' +
       '<div class="ctl"><button type="button" class="pp" aria-label="Play">' + PLAY + '</button><div class="bar"><div class="trk"><div class="buf"></div><div class="fil"></div><div class="knob"></div></div></div><span class="tm">0:00 / 0:00</span><button type="button" class="fs" aria-label="Full screen">' + FS + '</button></div>';
+    w.oncontextmenu = function (e) { e.preventDefault(); };
     var v = w.querySelector('video'), pp = w.querySelector('.pp'), bar = w.querySelector('.bar'), fil = w.querySelector('.fil'), knob = w.querySelector('.knob'), buf = w.querySelector('.buf'), tm = w.querySelector('.tm'), idle;
     function tog() { if (v.paused) v.play(); else v.pause(); }
     function upd() { var p = v.duration ? v.currentTime / v.duration : 0; fil.style.width = p * 100 + '%'; knob.style.left = p * 100 + '%'; tm.textContent = fmt(v.currentTime) + ' / ' + fmt(v.duration); try { if (v.buffered.length) buf.style.width = v.buffered.end(v.buffered.length - 1) / v.duration * 100 + '%'; } catch (e) {} }

@@ -1,0 +1,112 @@
+{
+ "article-body": {
+  "t": {
+   "ar": "مسارات الضوء على الجسم",
+   "en": "Light paths on the body"
+  },
+  "n": {
+   "ar": 1,
+   "en": 1
+  }
+ },
+ "article-brain": {
+  "t": {
+   "ar": "إيقاعات الدماغ والإدراك",
+   "en": "Brain rhythms and perception"
+  },
+  "n": {
+   "ar": 1,
+   "en": 1
+  }
+ },
+ "article-cell": {
+  "t": {
+   "ar": "الغشاء كخريطة للشحنات",
+   "en": "The membrane as a map of charges"
+  },
+  "n": {
+   "ar": 1,
+   "en": 1
+  }
+ },
+ "article-time": {
+  "t": {
+   "ar": "الوقت والزمن ليسا شيئًا واحدًا",
+   "en": "Time and duration are not the same"
+  },
+  "n": {
+   "ar": 1,
+   "en": 1
+  }
+ },
+ "article-vision": {
+  "t": {
+   "ar": "كل دورة تعود إلى جذرها",
+   "en": "Every cycle returns to its root"
+  },
+  "n": {
+   "ar": 1,
+   "en": 1
+  }
+ },
+ "article-waves": {
+  "t": {
+   "ar": "الضوء والصوت: موجة واحدة؟",
+   "en": "Light and sound: one wave?"
+  },
+  "n": {
+   "ar": 1,
+   "en": 1
+  }
+ },
+ "why-pi-branching": {
+  "t": {
+   "ar": "لماذا π؟ · آلية الفرعين الأمامي والخلفي",
+   "en": "Why π? · The branching mechanism"
+  },
+  "n": {
+   "ar": 9,
+   "en": 7
+  }
+ },
+ "why-pi-diagrams": {
+  "t": {
+   "ar": "لماذا π؟ · الأطلس البياني للدائرة",
+   "en": "Why π? · The circle diagram atlas"
+  },
+  "n": {
+   "ar": 7,
+   "en": 6
+  }
+ },
+ "why-pi-document-2": {
+  "t": {
+   "ar": "لماذا π؟ · الوثيقة الثانية: الأقطار العشرة والمركز والكرة",
+   "en": "Why π? · Document II: the ten diameters, the centre, the sphere"
+  },
+  "n": {
+   "ar": 13,
+   "en": 11
+  }
+ },
+ "why-pi-introduction": {
+  "t": {
+   "ar": "لماذا π؟ · المقدمة الشاملة",
+   "en": "Why π? · The comprehensive introduction"
+  },
+  "n": {
+   "ar": 12,
+   "en": 11
+  }
+ },
+ "user-guide": {
+  "t": {
+   "ar": "دليل المستخدم والتشغيل",
+   "en": "User guide & manual"
+  },
+  "n": {
+   "ar": 9,
+   "en": 9
+  }
+ }
+}
