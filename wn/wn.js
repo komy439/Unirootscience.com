@@ -135,9 +135,10 @@
   function fbKey(i) { return String(i.id || i.ref || '').replace(/-(ar|en)$/, ''); }
   function fbBar(key, title, lang) { var d = el('div', 'fbBar'); d.dataset.key = key; d.dataset.title = title; if (lang) d.dataset.lang = lang; return d; }
   window.URP = function (src, poster) { return player(src, poster); };
+  function openArt(i) { /* an Arabic item opens the Arabic article, an English item the English one */ if (i.lang && i.lang !== L()) { var s = document.querySelector('[data-l="' + i.lang + '"]'); if (s) s.click(); } var b = document.querySelector('[data-art="' + i.ref + '"]'); if (b) { setTimeout(function () { b.click(); }, i.lang && i.lang !== L() ? 60 : 0); return true; } return false; }
   function closeView() { var v = view.querySelector('video'); if (v) v.pause(); view.classList.remove('on'); view.innerHTML = ''; }
   function show(i) {
-    if ((i.type === 'article' || i.type === 'section') && i.ref) { var b = document.querySelector('[data-art="' + i.ref + '"]'); if (b) { close(); b.click(); return; } }
+    if ((i.type === 'article' || i.type === 'section') && i.ref && document.querySelector('[data-art="' + i.ref + '"]')) { close(); openArt(i); return; }
     if (i.type === 'link' && i.ref) { window.open(i.ref, '_blank', 'noopener'); return; }
     var ar = i.lang === 'ar', box = el('div', 'bx' + (ar ? ' ar' : ''));
     box.innerHTML = '<h4>' + esc(i.title) + '</h4>';
@@ -191,7 +192,7 @@
     if (i.type === 'video' && i.ref) { var e = yt(i.ref); if (e) c.insertAdjacentHTML('beforeend', '<div class="urp"><iframe src="' + e + '" allowfullscreen style="width:100%;aspect-ratio:16/9;border:0"></iframe></div>'); else c.appendChild(player(i.ref, i.poster)); }
     if (i.type === 'image' && i.ref) c.insertAdjacentHTML('beforeend', '<img src="' + esc(i.ref) + '" alt="">');
     if (i.sub || i.text) c.appendChild(el('p', '', esc(i.type === 'note' ? (i.text || i.sub) : i.sub)));
-    if (i.type === 'article' && i.ref) { var g = el('button', 'go', ar ? 'اقرأ المقال' : 'Read the article'); g.type = 'button'; g.onclick = function () { var b = document.querySelector('[data-art="' + i.ref + '"]'); if (b) b.click(); }; c.appendChild(g); }
+    if (i.type === 'article' && i.ref) { var g = el('button', 'go', ar ? 'اقرأ المقال' : 'Read the article'); g.type = 'button'; g.onclick = function () { openArt(i); }; c.appendChild(g); }
     if (i.type === 'link' && i.ref) c.insertAdjacentHTML('beforeend', '<a class="go" href="' + esc(i.ref) + '" target="_blank" rel="noopener">' + (ar ? 'افتح' : 'Open') + ' ↗</a>');
     if (i.id) c.appendChild(fbBar(fbKey(i), i.title, i.lang));
     var u = el('button', 'unpin', ar ? '📌 إلى الفولدر' : '📌 Back to folder'); u.type = 'button'; u.onclick = function () { i.pin = false; save(); render(); }; c.appendChild(u);
