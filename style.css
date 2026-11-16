@@ -334,3 +334,10 @@ html[lang=ar] .lbW.en-only,html:not([lang=ar]) .lbW.ar-only{display:none!importa
 /* contact: WhatsApp, Gmail, email app, copy, phone */
 .btn .ic,.ctI .ic{width:20px;height:20px;vertical-align:-5px;margin-inline-end:8px;flex:none}.ctB .btn{display:inline-flex;align-items:center;font-family:inherit;cursor:pointer}.ctB button.btn{font-size:15px;color:#fff}.ctMail{margin:14px 0 0;color:#a8926b;font-size:14px;letter-spacing:.04em;text-align:center;user-select:all}.ctI{display:inline-flex;align-items:center;gap:0}.ctI .ic{width:16px;height:16px;vertical-align:-3px;margin-inline-end:6px}
 footer .ct{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 10px}
+
+/* the About link: a blue pill, so it reads as a page with more inside */
+nav a.navAbout{background:linear-gradient(180deg,#2f6fe0,#1d4fb3);color:#fff!important;border:1px solid #6fa3ff;border-radius:999px;padding:6px 14px!important;box-shadow:0 0 12px #3f7fff55}
+nav a.navAbout:hover{background:linear-gradient(180deg,#3d80f5,#2459c7)}
+/* phones and tablets: the menu links are hidden, but the blue About pill stays */
+@media (max-width:1020px){nav a.navAbout{display:inline-flex!important;align-items:center;font-size:13px;margin-inline-end:6px;white-space:nowrap;padding:5px 11px!important}}
+nav a.navAbout{white-space:nowrap}
