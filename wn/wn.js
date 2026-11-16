@@ -8,8 +8,8 @@
     { k: 'math', en: 'Math', ar: 'رياضيات', c: '#fff0c8' },
     { k: 'cosmic', en: 'Cosmic', ar: 'كوني', c: '#c8943f' }
   ];
-  var TY = { article: '📄', note: '✎', image: '◩', video: '▶', link: '↗' };
-  var TYN = { article: ['Article', 'مقال'], note: ['Note', 'ملاحظة'], image: ['Image', 'صورة'], video: ['Video', 'فيديو'], link: ['Link', 'رابط'] };
+  var TY = { article: '📄', note: '✎', image: '◩', video: '▶', pdf: '📕', link: '↗' };
+  var TYN = { article: ['Article', 'مقال'], note: ['Note', 'ملاحظة'], image: ['Image', 'صورة'], video: ['Video', 'فيديو'], pdf: ['PDF', 'ملف PDF'], link: ['Link', 'رابط'] };
   var DK = 'uniroot_wn_draft2', h = document.documentElement, data = { badge: null, items: [], moved: {} }, open = {};
   var L = function () { return h.lang === 'ar' ? 'ar' : 'en'; };
   var own = function () { return h.classList.contains('own'); };
@@ -139,7 +139,7 @@
   function closeView() { var v = view.querySelector('video'); if (v) v.pause(); view.classList.remove('on'); view.innerHTML = ''; }
   function show(i) {
     if ((i.type === 'article' || i.type === 'section') && i.ref && document.querySelector('[data-art="' + i.ref + '"]')) { close(); openArt(i); return; }
-    if (i.type === 'link' && i.ref) { window.open(i.ref, '_blank', 'noopener'); return; }
+    if ((i.type === 'link' || i.type === 'pdf') && i.ref) { window.open(i.ref, '_blank', 'noopener'); return; }
     var ar = i.lang === 'ar', box = el('div', 'bx' + (ar ? ' ar' : ''));
     box.innerHTML = '<h4>' + esc(i.title) + '</h4>';
     if (i.type === 'image' && i.ref) box.insertAdjacentHTML('beforeend', '<img src="' + esc(i.ref) + '" alt="">');
@@ -150,6 +150,36 @@
     view.innerHTML = ''; view.appendChild(box); view.classList.add('on');
   }
   view.onclick = function (e) { if (e.target === view) closeView(); };
+
+  /* 📎 upload a file from this device to the site (uploads/…) with the Publish key, then fill the path in the form */
+  function safeName(n) { var m = String(n).toLowerCase().match(/^(.*?)(\.[a-z0-9]{1,5})?$/), base = (m[1] || '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'file'; return base + (m[2] || ''); }
+  function upRow(fm, field, accept, setType, ui) {
+    var inp = fm.elements[field]; if (!inp) return;
+    var row = el('div', 'upR'), b = el('button', 'upB', field === 'poster' ? (ui ? '📎 اختيار صورة الغلاف' : '📎 Choose a poster image') : (ui ? '📎 اختيار ملف من الجهاز' : '📎 Choose a file from this device'));
+    b.type = 'button'; var f = document.createElement('input'); f.type = 'file'; f.hidden = true; if (accept) f.accept = accept; var s = el('span', 'upS', '');
+    row.appendChild(b); row.appendChild(f); row.appendChild(s); inp.insertAdjacentElement('afterend', row);
+    b.onclick = function () { f.click(); };
+    f.onchange = function () {
+      var file = f.files[0]; f.value = ''; if (!file) return;
+      var t = ''; try { t = localStorage.getItem(TK) || ''; } catch (x) {}
+      if (!t) { s.textContent = ui ? 'ادخل مفتاح النشر أولًا: دوس Publish مرة واحدة' : 'Enter the Publish key first: press Publish once'; s.style.color = '#ff7a6b'; return; }
+      if (file.size > 45 * 1024 * 1024) { s.textContent = ui ? 'الملف أكبر من 45 ميجا' : 'The file is over 45 MB'; s.style.color = '#ff7a6b'; return; }
+      var d = new Date(), stamp = d.getFullYear() + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + '-' + String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0') + String(d.getSeconds()).padStart(2, '0');
+      var path = 'uploads/' + stamp + '-' + safeName(file.name);
+      s.style.color = ''; s.textContent = (ui ? 'جارٍ الرفع… ' : 'Uploading… ') + Math.round(file.size / 1048576 * 10) / 10 + ' MB'; b.disabled = true;
+      var rd = new FileReader();
+      rd.onload = function () {
+        var content = String(rd.result).split(',')[1];
+        fetch('https://api.github.com/repos/' + REPO + '/contents/' + path, { method: 'PUT', headers: { Authorization: 'Bearer ' + t, Accept: 'application/vnd.github+json' }, body: JSON.stringify({ message: 'Upload ' + path, content: content, branch: 'main' }) })
+          .then(function (r) { if (r.status === 401 || r.status === 403) throw 'auth'; if (!r.ok) throw 'http ' + r.status; inp.value = path; s.textContent = (ui ? 'تم الرفع ✓ ' : 'Uploaded ✓ ') + path; s.style.color = '#8fe08a';
+            if (setType) { var ty = /^video\//.test(file.type) ? 'video' : /^image\//.test(file.type) ? 'image' : /pdf$/.test(file.type) || /\.pdf$/i.test(file.name) ? 'pdf' : 'link'; fm.elements.type.value = ty; }
+            if (field === 'ref' && !fm.elements.title.value) fm.elements.title.value = file.name.replace(/\.[^.]+$/, ''); })
+          .catch(function (e) { s.textContent = e === 'auth' ? (ui ? 'مفتاح النشر غير صالح' : 'The Publish key was rejected') : (ui ? 'لم يتم الرفع: ' : 'Not uploaded: ') + e; s.style.color = '#ff7a6b'; })
+          .then(function () { b.disabled = false; });
+      };
+      rd.readAsDataURL(file);
+    };
+  }
   function edit(i) {
     var isNew = data.items.indexOf(i) < 0, lang = i.lang || 'en', ui = L() === 'ar';
     var F = [['title', ui ? 'العنوان' : 'Title'], ['sub', ui ? 'سطر قصير' : 'Short line'], ['text', ui ? 'النص' : 'Text'], ['ref', ui ? 'رابط / مسار الفيديو أو الصورة / يوتيوب / اسم المقال' : 'Link / video or image path / YouTube / article key'], ['poster', ui ? 'صورة غلاف الفيديو (اختياري)' : 'Video poster (optional)'], ['date', ui ? 'التاريخ' : 'Date']];
@@ -163,6 +193,7 @@
     F.forEach(function (f) { fm.elements[f[0]].value = i[f[0]] || ''; });
     function setLang(v) { lang = v; fm.querySelectorAll('.seg button').forEach(function (b) { b.classList.toggle('on', b.dataset.v === v); }); fm.querySelector('.fl').className = 'fl ' + v; fm.querySelectorAll('.tx').forEach(function (x) { x.dir = v === 'ar' ? 'rtl' : 'ltr'; }); }
     fm.querySelectorAll('.seg button').forEach(function (b) { b.onclick = function () { setLang(b.dataset.v); }; }); setLang(lang);
+    upRow(fm, 'ref', '', true, ui); upRow(fm, 'poster', 'image/*', false, ui);
     form.querySelector('[data-c]').onclick = function () { form.classList.remove('on'); };
     fm.onsubmit = function (e) {
       e.preventDefault(); i.lang = lang; i.cat = fm.elements.cat.value; i.type = fm.elements.type.value;
@@ -194,6 +225,7 @@
     if (i.sub || i.text) c.appendChild(el('p', '', esc(i.type === 'note' ? (i.text || i.sub) : i.sub)));
     if (i.type === 'article' && i.ref) { var g = el('button', 'go', ar ? 'اقرأ المقال' : 'Read the article'); g.type = 'button'; g.onclick = function () { openArt(i); }; c.appendChild(g); }
     if (i.type === 'link' && i.ref) c.insertAdjacentHTML('beforeend', '<a class="go" href="' + esc(i.ref) + '" target="_blank" rel="noopener">' + (ar ? 'افتح' : 'Open') + ' ↗</a>');
+    if (i.type === 'pdf' && i.ref) c.insertAdjacentHTML('beforeend', '<a class="go" href="' + esc(i.ref) + '" target="_blank" rel="noopener">' + (ar ? 'افتح الملف' : 'Open the PDF') + ' ↗</a> <a class="go" href="' + esc(i.ref) + '" download>' + (ar ? 'تحميل' : 'Download') + ' ↓</a>');
     if (i.id) c.appendChild(fbBar(fbKey(i), i.title, i.lang));
     var u = el('button', 'unpin', ar ? '📌 إلى الفولدر' : '📌 Back to folder'); u.type = 'button'; u.onclick = function () { i.pin = false; save(); render(); }; c.appendChild(u);
     return c;
