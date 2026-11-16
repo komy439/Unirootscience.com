@@ -242,6 +242,36 @@
    "pin": true
   },
   {
+   "id": "pi8-ar",
+   "cat": "math",
+   "lang": "ar",
+   "type": "video",
+   "title": "لماذا π؟ · الجزء ٨ · 3.141592 من داخل البنية",
+   "sub": "الجمع التراكمي… والأرقام تخرج من البنية نفسها.",
+   "text": "",
+   "ref": "videos/why-pi-8-ar.mp4",
+   "poster": "videos/why-pi-8-ar.jpg",
+   "date": "2026-11-17",
+   "show": true,
+   "isNew": true,
+   "pin": true
+  },
+  {
+   "id": "pi8-en",
+   "cat": "math",
+   "lang": "en",
+   "type": "video",
+   "title": "Why π? · Part 8 · 3.141592 from inside the structure",
+   "sub": "Cumulative sum… the digits emerge from the structure itself.",
+   "text": "",
+   "ref": "videos/why-pi-8-en.mp4",
+   "poster": "videos/why-pi-8-en.jpg",
+   "date": "2026-11-17",
+   "show": true,
+   "isNew": true,
+   "pin": true
+  },
+  {
    "id": "pip-introduction-ar",
    "cat": "math",
    "lang": "ar",
