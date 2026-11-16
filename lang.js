@@ -21,9 +21,9 @@
 // On narrow screens it sits beside What's new instead.
 (function(){var ro;function tog(){var b=document.querySelector('header [data-l]');return b?b.parentElement:null}
 function place(){var a=document.querySelector('nav a.navAbout'),w=document.querySelector('.wnBtn'),t=tog();if(!a||!w||!t){setTimeout(place,200);return}
- var rtl=document.documentElement.dir==='rtl';t.style.marginInlineEnd='';a.classList.add('dock');
+ var rtl=document.documentElement.dir==='rtl';t.style.marginInlineEnd='';a.classList.add('dock');a.style.position='fixed';a.style.zIndex='31';a.style.display='inline-flex';a.style.alignItems='center';a.style.boxSizing='border-box';a.style.margin='0';
  var r=w.getBoundingClientRect();
- if(innerWidth>760){t.style.marginInlineEnd=(r.width+10)+'px';var tr=t.getBoundingClientRect();a.style.top=tr.top+'px';a.style.height=tr.height+'px';a.style.width=r.width+'px';a.style.justifyContent='center';
+ if(innerWidth>760){t.style.marginInlineEnd=(r.width+10)+'px';var tr=t.getBoundingClientRect();a.style.top=(tr.top+tr.height/2-r.height/2)+'px';a.style.height=r.height+'px';a.style.width=r.width+'px';a.style.justifyContent='center';
    if(rtl){a.style.left=r.left+'px';a.style.right='auto'}else{a.style.right=(innerWidth-r.right)+'px';a.style.left='auto'}}
  else{a.style.width='';a.style.justifyContent='';a.style.top=r.top+'px';a.style.height=r.height+'px';
    if(rtl){a.style.left=(r.right+8)+'px';a.style.right='auto'}else{a.style.right=(innerWidth-r.left+8)+'px';a.style.left='auto'}}
