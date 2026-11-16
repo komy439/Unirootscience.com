@@ -17,10 +17,16 @@
   });
 })();
 
-// dock the About button beside the What's new button: same top, same height, its edge 8px from What's new
-(function(){var ro;function place(){var a=document.querySelector('nav a.navAbout'),w=document.querySelector('.wnBtn');if(!a||!w){setTimeout(place,200);return}
- var r=w.getBoundingClientRect(),rtl=document.documentElement.dir==='rtl';a.classList.add('dock');a.style.top=r.top+'px';a.style.height=r.height+'px';
- if(rtl){a.style.left=(r.right+8)+'px';a.style.right='auto'}else{a.style.right=(innerWidth-r.left+8)+'px';a.style.left='auto'}
- if(!ro&&window.ResizeObserver){ro=new ResizeObserver(place);ro.observe(w)}}
+// About sits in the top row directly above What's new: same outer edge, same width; the language switch steps inward to make room.
+// On narrow screens it sits beside What's new instead.
+(function(){var ro;function tog(){var b=document.querySelector('header [data-l]');return b?b.parentElement:null}
+function place(){var a=document.querySelector('nav a.navAbout'),w=document.querySelector('.wnBtn'),t=tog();if(!a||!w||!t){setTimeout(place,200);return}
+ var rtl=document.documentElement.dir==='rtl';t.style.marginInlineEnd='';a.classList.add('dock');
+ var r=w.getBoundingClientRect();
+ if(innerWidth>760){t.style.marginInlineEnd=(r.width+10)+'px';var tr=t.getBoundingClientRect();a.style.top=tr.top+'px';a.style.height=tr.height+'px';a.style.width=r.width+'px';a.style.justifyContent='center';
+   if(rtl){a.style.left=r.left+'px';a.style.right='auto'}else{a.style.right=(innerWidth-r.right)+'px';a.style.left='auto'}}
+ else{a.style.width='';a.style.justifyContent='';a.style.top=r.top+'px';a.style.height=r.height+'px';
+   if(rtl){a.style.left=(r.right+8)+'px';a.style.right='auto'}else{a.style.right=(innerWidth-r.left+8)+'px';a.style.left='auto'}}
+ if(!ro&&window.ResizeObserver){ro=new ResizeObserver(function(){requestAnimationFrame(place)});ro.observe(w)}}
  addEventListener('resize',place);document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-l]'))setTimeout(place,80)});
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',place);else place();setTimeout(place,900);})();
