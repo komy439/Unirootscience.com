@@ -2,6 +2,36 @@
  "badge": null,
  "items": [
   {
+   "id": "v3-ar",
+   "cat": "bio",
+   "lang": "ar",
+   "type": "video",
+   "title": "القبض والبسط",
+   "sub": "الإيقاع، وتناغم الخلايا، وسؤالان مفتوحان.",
+   "text": "",
+   "ref": "videos/contraction-expansion-ar.mp4",
+   "poster": "videos/contraction-expansion-ar.jpg",
+   "date": "2026-11-16",
+   "show": true,
+   "isNew": true,
+   "pin": true
+  },
+  {
+   "id": "v3-en",
+   "cat": "bio",
+   "lang": "en",
+   "type": "video",
+   "title": "Contraction & Expansion",
+   "sub": "Rhythm, harmony between cells, and two open questions.",
+   "text": "",
+   "ref": "videos/contraction-expansion-en.mp4",
+   "poster": "videos/contraction-expansion-en.jpg",
+   "date": "2026-11-16",
+   "show": true,
+   "isNew": true,
+   "pin": true
+  },
+  {
    "id": "v2-ar",
    "cat": "bio",
    "lang": "ar",
