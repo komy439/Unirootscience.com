@@ -1,0 +1,95 @@
+{
+ "v": 1,
+ "salt": "AahLfELFBOnanez/dfjU+g==",
+ "it": 250000,
+ "keys": {
+  "article-body|ar": {
+   "iv": "S00Jn5BaoQD+iEdS",
+   "ct": "12hRIpSgb99Detx3q4VyyQl4M632gbVBxZGQiGhBGSJwFOZwaB2KReBz+gSDBBC5"
+  },
+  "article-body|en": {
+   "iv": "89/KQmyg9qeMUUpq",
+   "ct": "CjgrXt+EB0kC1ieJWBd9+OqY9N4tilS8bkw1WuQlA5iWUS3f11J63YUeRM9w7HRX"
+  },
+  "article-brain|ar": {
+   "iv": "Dxfp2y4BYtH/Wj5Y",
+   "ct": "zWSTidb4yqd19rLTI30oAL4/1yWJuktTp6i28HBO/v4guAQii1+2u7AL+0zzCrBV"
+  },
+  "article-brain|en": {
+   "iv": "QzGzmTTlxU3so8cD",
+   "ct": "DHVGIpNd3c45HvYT6b+GOb4jjbz5QwBxKsVdHfEU/eb7lgbjJD+CNURdHm5x+ZeO"
+  },
+  "article-cell|ar": {
+   "iv": "JFOg/a4HM8LvjBTi",
+   "ct": "qwEFMH7U6P5fIbWvOYH3VPeHQfZ2oBFCsJhpJUmyXVM2Bfc9G+mwb0aakjjGA0g6"
+  },
+  "article-cell|en": {
+   "iv": "KJf6GOSPPOj6PZMc",
+   "ct": "OR1e5NuO0GcEaQsQUs4RQrwX4QFQE8u1y9fiHMO5GtQvniLOF/EMrQz6wanIDvH4"
+  },
+  "article-time|ar": {
+   "iv": "QruwW7XoDKHcW7I2",
+   "ct": "k2D/aKkXN0BaWsAOoy5/KGwLz96vnFmoWNErtdPMTEYXcHaOmAO36pX93XIWamcm"
+  },
+  "article-time|en": {
+   "iv": "9jPPKd3ggo12X6Cr",
+   "ct": "xE9JsPzmylahrcUVdTYEJ+nBDSkbaR2s49vfHiXNi6hGRzZMy/dgKF8MFldAaOnJ"
+  },
+  "article-vision|ar": {
+   "iv": "9V4DUk61FX5+dL+D",
+   "ct": "kDGohf+f94IsdsPPAVkDDb3643FKftbFF1vz4IYFoldXW1on4RjJBfrHiNtZOBuh"
+  },
+  "article-vision|en": {
+   "iv": "38mMV1EhtNWE6KkO",
+   "ct": "AhyfpSTyujVk4/Hb76pEOcKrPfDZSGCQR0HFk9rNoDyWQWmBkzJkJzwb//rwCGXo"
+  },
+  "article-waves|ar": {
+   "iv": "7noBn83VyrO4xZGN",
+   "ct": "ytYycbhE7KwwmcS+DnCamVLo580xz7h8QcWXTO5orHyqAHY1MZOQY+ExDVLoDLxy"
+  },
+  "article-waves|en": {
+   "iv": "aky9qsUVGKCudrLd",
+   "ct": "hD7i5jVg8xcoQ2pnDrnOvFrXjKwJZNV4rHITocpv77bcEQhGjS38MoyVdOeW+WtE"
+  },
+  "why-pi-branching|ar": {
+   "iv": "8x56hKtPcuJCvNvi",
+   "ct": "W0qnMuZ3T2P0JmvIhxlFJwyOPlGLFs+HjNicMJcGwhmOu0Q39Kvc/Q/a4SGvCOh+"
+  },
+  "why-pi-branching|en": {
+   "iv": "uO5LH56fkGiAnJvo",
+   "ct": "ibNN9M3wzrmWGi9FJ/6QCgg3rr737TMAqyfepjTAFOSYrYgQtgqDVftpiivxHRKL"
+  },
+  "why-pi-diagrams|ar": {
+   "iv": "5ndSV1WhNIc+f2XI",
+   "ct": "N0JPCuXmPGxGfh5UXcPq1vYJDGfU67zfTrlokzEscESam5n4H4aYOqlgsA/LbuCf"
+  },
+  "why-pi-diagrams|en": {
+   "iv": "VRUwSP65aFCn6SZt",
+   "ct": "b4rzKByxxQD2ZPHUb409MM5zmirbWWH0jlwDXKTj5Qyn3tygvNSuFL1pY/zDO3Vh"
+  },
+  "why-pi-document-2|ar": {
+   "iv": "3tq4latzMMS3y2a/",
+   "ct": "PVdeWz3vbowPclTJUgjZGHgpQ7xcbvWit/qc/V1SxrRIMtMEawMKH6qobwCpwV4H"
+  },
+  "why-pi-document-2|en": {
+   "iv": "S6eke4/IcT7O03nd",
+   "ct": "y5ORkMihd3G4HpslohZWmNwT0l8fyLaaWKvJyuB5XuYJSZkRFzG2JZulF7WlmeLE"
+  },
+  "why-pi-introduction|ar": {
+   "iv": "NOYrhnIwtMtwQF9a",
+   "ct": "G2hX5q9zJDFCRqeEbR1CLKG9NwGIDsWKc4WHJNRdZOcMowMSS2RbfsQn/SjHuhd5"
+  },
+  "why-pi-introduction|en": {
+   "iv": "XjviS4QXSAcFQWAE",
+   "ct": "cPk44Ef09z521VxRfwHrW7Wf42BizGX5SBTX1Yq7v783c9cs44BO2fmklFQUhS0A"
+  },
+  "user-guide|ar": {
+   "iv": "QUWnbsHTHQEUoE+E",
+   "ct": "ZrkAqxsl4hlIDX64TQOKmHdDnLRUn1hWqlAZilEW/jkoayy+ldf3Nw3qSUaQa5Dk"
+  },
+  "user-guide|en": {
+   "iv": "ri4FEQj2lFDaqnHL",
+   "ct": "C3Nxy+zayE6DP74ZbrXfvtjdMHiMVLrxJTIBIXnXbbnJzuCrhJn062whBStPN9SR"
+  }
+ }
+}

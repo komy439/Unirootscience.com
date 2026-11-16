@@ -21,6 +21,7 @@ html[lang=en] .t{font-family:Inter,system-ui,sans-serif;font-size:16px;font-weig
 html[lang=ar] .foot{font-family:Ami,serif;font-size:16px}
 .err{text-align:center;padding:80px 20px;color:#8c8270}
 @media print{body{display:none}}
+@media (max-width:640px){.s{display:none}.bar{gap:8px;padding:10px}.t{font-size:17px}.btn,.lang,.vb{padding:6px 10px!important}}
 </style></head><body>
 <div class="bar"><a class="btn" id="back" href="./"></a><div class="t" id="t"></div><span class="s" id="s"></span><button class="lang" id="lg" type="button"></button></div>
 <div class="wrap" id="w"></div>
@@ -38,7 +39,7 @@ html[lang=ar] .foot{font-family:Ami,serif;font-size:16px}
   document.getElementById('f').innerHTML=AR?'© 2026 أحمد الكومي · uni root<br>للقراءة على الصفحة فقط · لطلب الملف <a href="./#contact">تواصل مع uni root</a>':'© 2026 Ahmed Elkomy · uni root<br>For reading on this page only · to request the file, <a href="./#contact">contact uni root</a>';
   fetch('read/docs.json').then(function(r){return r.json()}).then(function(D){
     var o=D[d];if(!o){document.getElementById('w').innerHTML='<div class="err">'+(AR?'الملف غير موجود.':'Not found.')+'</div>';return}
-    var n=o.n[l]||o.n.ar;document.getElementById('t').textContent=o.t[l];document.title=o.t[l]+' · uni root';
+    var n=o.n[l]||o.n.ar;document.getElementById('t').textContent=o.t[l];if(window.UNIROOT_VAULT)UNIROOT_VAULT(document.querySelector('.bar'),o.t[l]);document.title=o.t[l]+' · uni root';
     document.getElementById('s').textContent=AR?num(n)+(n>10?' صفحة':n>2?' صفحات':' صفحة'):n+(n>1?' pages':' page');
     var w=document.getElementById('w'),ll=o.n[l]?l:'ar';
     for(var i=1;i<=n;i++){var p=document.createElement('div');p.className='pg';var s=String(i).padStart(2,'0');
@@ -48,4 +49,4 @@ html[lang=ar] .foot{font-family:Ami,serif;font-size:16px}
   document.addEventListener('dragstart',function(e){e.preventDefault()});
   document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&['s','p','u'].indexOf(e.key.toLowerCase())>=0)e.preventDefault()});
 })();
-</script></body></html>
+</script><script src="vault.js"></script></body></html>
