@@ -27,9 +27,9 @@
           out.push({ id: i.id + '-' + l, cat: i.cat, lang: l, type: i.type, title: i['title_' + l], sub: i['sub_' + l] || '', text: i['text_' + l] || '', ref: i.ref || '', date: i.date || '', show: i.show !== false, isNew: !!i.isNew });
         });
       });
-      return { badge: null, items: out, moved: {} };
+      return { badge: null, items: out, moved: {}, next: { ar: '', en: '' } };
     }
-    return { badge: d && d.badge != null && d.badge !== '' ? d.badge : null, items: (d && d.items) || [], moved: (d && d.moved) || {} };
+    return { badge: d && d.badge != null && d.badge !== '' ? d.badge : null, items: (d && d.items) || [], moved: (d && d.moved) || {}, next: (d && d.next) || { ar: '', en: '' } };
   }
   var btn = el('button', 'wnBtn'); btn.type = 'button';
   var shade = el('div', 'wnShade'), panel = el('aside', 'wnPanel'), form = el('div', 'wnForm'), view = el('div', 'wnView');
@@ -41,8 +41,31 @@
   function save() { try { localStorage.setItem(DK, JSON.stringify(data)); } catch (e) {} }
   function visible() { return data.items.filter(function (i) { return own() || i.show !== false; }); }
   function badgeNum() { if (data.badge != null && data.badge !== '') return +data.badge || 0; return data.items.filter(function (i) { return i.show !== false && i.isNew; }).length; }
+  // what's next: one wide line under About and what's new — a title only; the owner types it here (Arabic and English), Publish saves it
+  var nx = el('div', 'wnNext');
+  function placeNext() {
+    var a = document.querySelector('.navAbout.dock') || document.querySelector('.navAbout'), b = btn.getBoundingClientRect(), r = a ? a.getBoundingClientRect() : b;
+    if (!b.width) { nx.style.display = 'none'; return; }
+    var L0 = Math.min(r.left, b.left), R0 = Math.max(r.right, b.right), T0 = Math.max(r.bottom, b.bottom) + 8;
+    var rtl = h.lang === 'ar'; if (innerWidth > 700 && R0 - L0 < 280) { if (rtl) R0 = Math.min(innerWidth - 12, L0 + 280); else L0 = Math.max(12, R0 - 280); }   // stacked on wide screens: give the title room
+    nx.style.left = L0 + 'px'; nx.style.width = (R0 - L0) + 'px'; nx.style.top = T0 + 'px';
+  }
+  function renderNext() {
+    if (!nx.parentNode) { if (!document.body) return; document.body.appendChild(nx); }
+    var l = L(), ar = l === 'ar', nt = (data.next && data.next[l]) || '', lab = ar ? 'القادم' : "what's next";
+    if (own()) {
+      nx.style.display = '';
+      if (!nx.querySelector('input') || nx.dataset.l !== l) { nx.dataset.l = l; nx.innerHTML = '<span>' + lab + '</span><input type="text" maxlength="90">'; var inp = nx.querySelector('input');
+        inp.placeholder = ar ? 'اكتب العنوان (عربي)…' : 'Type the title (English)…';
+        inp.oninput = function () { data.next = data.next || { ar: '', en: '' }; data.next[l] = inp.value; save(); }; }
+      var ii = nx.querySelector('input'); if (document.activeElement !== ii) ii.value = nt;
+    } else if (nt) { nx.style.display = ''; nx.dataset.l = l; nx.innerHTML = '<span>' + lab + '</span><b>' + esc(nt) + '</b>'; }
+    else { nx.style.display = 'none'; nx.innerHTML = ''; }
+    nx.dir = ar ? 'rtl' : 'ltr'; placeNext();
+  }
+  addEventListener('resize', function () { placeNext(); }); setTimeout(placeNext, 300); setTimeout(placeNext, 1200);
   function render() {
-    var l = L(), ar = l === 'ar', n = badgeNum();
+    var l = L(), ar = l === 'ar', n = badgeNum(); setTimeout(renderNext, 0);
     btn.innerHTML = '<span>' + (ar ? 'ما الجديد' : "what's new") + '</span><i>' + (ar ? '؟' : '?') + '</i><b></b>';
     btn.classList.toggle('has', n > 0); btn.querySelector('b').textContent = ar ? AD(n) : n;
     panel.querySelector('h3').textContent = ar ? 'ما الجديد؟' : "What's new?";

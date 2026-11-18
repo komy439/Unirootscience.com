@@ -208,3 +208,11 @@ html[lang=ar] .wnF .nm{font-size:19px!important}
 .wnCol.ar h5{font-size:12.5px!important}
 .wnCol.en .wnI .ty{background:#1f120b!important;color:#ff7a45!important}
 .wnCol.en .wnI:hover{background:#1a120c!important}
+/* what's next — one wide line under About and what's new, a title only */
+.wnNext{position:fixed;z-index:30;box-sizing:border-box;display:flex;align-items:center;gap:9px;padding:7px 13px;border-radius:12px;border:1px solid rgba(255,107,43,.55);background:rgba(16,12,8,.82);backdrop-filter:blur(10px);color:#f3e6c4}
+.wnNext span{flex:none;font:700 10px Poppins,system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#ff6a2b}
+.wnNext b{font:600 13px/1.35 Poppins,system-ui,sans-serif;color:#f7e7c2;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.wnNext input{flex:1;min-width:0;background:transparent;border:0;border-bottom:1px dashed rgba(243,207,122,.5);color:#f7e7c2;font:600 13px Poppins,system-ui,sans-serif;outline:none;padding:2px 0}
+html[lang=ar] .wnNext span{font:700 13px Ami,serif;letter-spacing:0}
+html[lang=ar] .wnNext b,html[lang=ar] .wnNext input{font:700 15px/1.4 Ami,serif}
+@media (max-width:700px){.wnNext{flex-direction:column;align-items:stretch;gap:3px;padding:7px 12px}.wnNext b{-webkit-line-clamp:2}}
