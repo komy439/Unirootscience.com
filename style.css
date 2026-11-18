@@ -347,3 +347,12 @@ nav a.navAbout.dock{position:fixed;z-index:31;display:inline-flex!important;alig
 html[lang=ar] nav a.navAbout.dock{font-family:Ami,serif;font-size:15px}
 
 html[lang=en] .arts a.rd.en-only,html[lang=ar] .arts a.rd.ar-only{display:inline-flex!important}
+/* the four section names (Bio · Physics · Math · Cosmic): reddish orange and a little bigger, wherever they appear */
+:root{--sec:#ff5b23}
+.bandH h2{color:var(--sec)!important;font-size:clamp(40px,5.8vw,68px)!important;text-shadow:0 0 22px rgba(255,91,35,.28)}
+html[lang=ar] .bandH h2{font-size:clamp(42px,5.8vw,70px)!important}
+.bandH .bn{color:#ff8a5c}
+.bandH i{background:linear-gradient(90deg,rgba(255,91,35,.6),rgba(255,91,35,0))!important}
+html[lang=ar] .bandH i{background:linear-gradient(270deg,rgba(255,91,35,.6),rgba(255,91,35,0))!important}
+nav a[href^="#band-"]{color:var(--sec)!important;font-size:15px!important;font-weight:600}
+nav a[href^="#band-"]:hover{color:#ff8a5c!important}
