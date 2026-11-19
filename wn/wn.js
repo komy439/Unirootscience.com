@@ -309,9 +309,19 @@
   panel.querySelector('[data-a=reset]').onclick = function () { try { localStorage.removeItem(DK); } catch (e) {} load(); };
   function load() {
     var draft = null; try { draft = own() && JSON.parse(localStorage.getItem(DK) || 'null'); } catch (e) {}
-    if (draft) { data = normalize(draft); render(); return; }
-    if (window.WN_DATA) { data = normalize(JSON.parse(JSON.stringify(window.WN_DATA))); render(); return; }
-    fetch('wn/content.json?v=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) { data = normalize(d); render(); }).catch(function () { render(); });
+    if (draft) { data = normalize(draft); render(); }
+    if (window.WN_DATA && !draft) { data = normalize(JSON.parse(JSON.stringify(window.WN_DATA))); render(); return; }
+    fetch('wn/content.json?v=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) {
+      var srv = normalize(d), ids = srv.items.map(function (i) { return i.id; });
+      if (!draft) { data = srv; try { localStorage.setItem(DK + '_seen', JSON.stringify(ids)); } catch (e) {} render(); return; }
+      // the owner's local draft: bring in what was published since (e.g. new videos), never drop it
+      var seen = null; try { seen = JSON.parse(localStorage.getItem(DK + '_seen') || 'null'); } catch (e) {}
+      var have = {}; data.items.forEach(function (i) { have[i.id] = 1; }); if (seen) seen.forEach(function (k) { have[k] = 1; });
+      var added = 0; srv.items.forEach(function (it, n) { if (have[it.id]) return; var prev = n ? srv.items[n - 1].id : null, at = -1;
+        data.items.forEach(function (x, m) { if (x.id === prev) at = m; }); data.items.splice(at + 1, 0, it); added++; });
+      try { localStorage.setItem(DK + '_seen', JSON.stringify(ids)); } catch (e) {}
+      if (added) { save(); render(); }
+    }).catch(function () { if (!draft) render(); });
   }
   document.addEventListener('DOMContentLoaded', function () {
     [btn, shade, panel, form, view, pick].forEach(function (e) { document.body.appendChild(e); });
