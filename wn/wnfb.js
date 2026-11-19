@@ -34,7 +34,7 @@ const waitUser = new Promise(res => { ready = res; });
 onAuthStateChanged(auth, u => {
   user = u;
   if (!u) { signInAnonymously(auth).catch(e => status('auth: ' + (e.code || e.message))); return; }
-  ready(u); document.querySelectorAll('.fbBar[data-on]').forEach(refresh); updateOwner();
+  ready(u); document.querySelectorAll('.fbBar[data-on]').forEach(refresh); updateOwner(); updateBell(); hashGo();
 });
 const isOwner = () => !!(user && user.email === OWNER && user.emailVerified);
 function status(m) { const s = document.querySelector('.wnBar span'); if (s && h.classList.contains('own')) { s.textContent = m; s.style.color = '#ff7a6b'; } }
@@ -139,10 +139,97 @@ async function openInbox() {
   } catch (e) { ls.textContent = (ar ? 'تعذّر التحميل: ' : 'Could not load: ') + (e.code || e.message); }
 }
 
+/* ---------- owner notifications: what came from outside (new comments, new likes) ---------- */
+// A bell in owner mode shows a list. Tapping one takes you straight to its place and the comment opens with a reply box; it then leaves the list.
+const NS = 'uniroot_notif_seen', NL = 'uniroot_notif_likes';
+const lsGet = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || 'null') || d; } catch (e) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+const bell = document.createElement('button'); bell.type = 'button'; bell.className = 'fbBell'; bell.innerHTML = '🔔<b hidden></b>';
+const nl = document.createElement('div'); nl.className = 'fbNl';
+const pop = document.createElement('div'); pop.className = 'fbPop';
+document.body.append(bell, nl, pop);
+let NOTES = [];
+async function collect() {
+  const out = [], seen = new Set(lsGet(NS, []));
+  if (isOwner()) {
+    try {
+      const s = await getDocs(query(collection(db, 'comments'), orderBy('ts', 'desc'), limit(300)));
+      s.docs.forEach(d => { const c = d.data(); if (!c.reply && !c.seen && !seen.has(d.id)) out.push({ kind: 'c', id: d.id, ref: d.ref, c, key: c.item, lang: c.lang, title: c.title, ts: (c.ts && c.ts.seconds) || 0 }); });
+    } catch (e) {}
+  }
+  try {
+    const base = lsGet(NL, null), s = await getDocs(collection(db, 'likes')), now = {};
+    s.docs.forEach(d => { now[d.id] = d.data().count || 0; });
+    if (!base) lsSet(NL, now);   // first time: today's counts are the starting point
+    else Object.keys(now).forEach(k => { const n = now[k] - (base[k] || 0); if (n > 0) out.push({ kind: 'l', id: 'like:' + k, key: k, n, count: now[k], title: (window.WNtitle ? window.WNtitle(k) : k), ts: 0 }); });
+  } catch (e) {}
+  return out.sort((a, b) => (a.kind === b.kind ? b.ts - a.ts : a.kind === 'c' ? -1 : 1));
+}
+async function updateBell() {
+  if (!h.classList.contains('own')) { bell.hidden = true; return; }
+  bell.hidden = false; NOTES = await collect();
+  const n = NOTES.length, b = bell.querySelector('b'); b.hidden = !n; b.textContent = N(n, L());
+  bell.title = L() === 'ar' ? 'الإشعارات' : 'Notifications';
+  const ob = document.querySelector('.wnBar [data-a=notif]'); if (ob) ob.textContent = '🔔' + (n ? ' ' + N(n, L()) : '');
+  if (nl.classList.contains('on')) listNotes();
+}
+async function openNotes() {
+  const ar = L() === 'ar';
+  if (!isOwner()) {
+    try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch (e) { status('sign-in: ' + (e.code || e.message)); return; }
+    if (!isOwner()) { status(ar ? 'هذا الحساب ليس حساب المالك' : 'Not the owner account'); await signOut(auth); return; }
+  }
+  nl.classList.toggle('on'); if (nl.classList.contains('on')) { nl.innerHTML = '<p class="em">' + (ar ? 'جارٍ التحميل…' : 'Loading…') + '</p>'; await updateBell(); listNotes(); }
+}
+function listNotes() {
+  const ar = L() === 'ar'; nl.dir = ar ? 'rtl' : 'ltr';
+  nl.innerHTML = '<div class="hd"><b>' + (ar ? 'الإشعارات' : 'Notifications') + '</b><button type="button" class="x">×</button></div>' +
+    (NOTES.length ? '' : '<p class="em">' + (ar ? 'لا جديد.' : 'Nothing new.') + '</p>');
+  nl.querySelector('.x').onclick = () => nl.classList.remove('on');
+  NOTES.forEach(o => {
+    const r = document.createElement('button'); r.type = 'button'; r.className = 'it ' + o.kind;
+    r.innerHTML = o.kind === 'c'
+      ? '<i>💬</i><span><b>' + esc(o.c.name || (ar ? 'تعليق' : 'A comment')) + '</b> · ' + esc(o.title) + '<em dir="' + (o.lang === 'ar' ? 'rtl' : 'ltr') + '">' + esc(o.c.text.slice(0, 110)) + (o.c.text.length > 110 ? '…' : '') + '</em><small>' + when(o.c.ts, L()) + '</small></span>'
+      : '<i>♥</i><span><b>+' + N(o.n, L()) + '</b> ' + (ar ? 'إعجاب' : (o.n > 1 ? 'likes' : 'like')) + ' · ' + esc(o.title) + '<small>' + (ar ? 'المجموع ' : 'total ') + N(o.count, L()) + '</small></span>';
+    r.onclick = () => goNote(o); nl.appendChild(r);
+  });
+}
+async function markSeen(o) {
+  if (o.kind === 'l') { const b = lsGet(NL, {}); b[o.key] = o.count; lsSet(NL, b); }
+  else { const s = lsGet(NS, []); if (!s.includes(o.id)) { s.push(o.id); lsSet(NS, s.slice(-500)); } try { await updateDoc(o.ref, { seen: true }); } catch (e) {} }
+  NOTES = NOTES.filter(x => x.id !== o.id); updateBell();
+}
+function samePage(p) { const n = x => (x || '/').replace(/index\.html$/, ''); return n(p) === n(location.pathname); }
+function goNote(o) {
+  nl.classList.remove('on');
+  if (o.kind === 'c' && o.c.page && !samePage(o.c.page)) { markSeen(o); location.href = o.c.page + '#fbgo=' + encodeURIComponent(o.id); return; }
+  const t = window.WNgo ? window.WNgo(o.key, o.lang) : document.querySelector('.fbBar[data-key="' + o.key + '"]');
+  markSeen(o);
+  if (t) setTimeout(() => { t.scrollIntoView({ behavior: 'smooth', block: 'center' }); t.classList.add('fbFlash'); setTimeout(() => t.classList.remove('fbFlash'), 2600); }, 120);
+  if (o.kind === 'c') showPop(o);
+}
+function showPop(o) {
+  const ar = L() === 'ar', c = o.c; pop.dir = ar ? 'rtl' : 'ltr';
+  pop.innerHTML = '<div class="hd"><b>💬 ' + esc(o.title) + '</b><button type="button" class="x">×</button></div><div class="mt">' + esc(c.name || (ar ? 'بدون اسم' : 'No name')) + (c.email ? ' · ' + esc(c.email) : '') + ' · ' + when(c.ts, c.lang) + '</div><p dir="' + (c.lang === 'ar' ? 'rtl' : 'ltr') + '">' + esc(c.text) + '</p><textarea placeholder="' + (ar ? 'ردّك…' : 'Your reply…') + '"></textarea><div class="ac"><button type="button" class="sv">' + (ar ? 'حفظ الرد' : 'Save reply') + '</button><span></span></div>';
+  pop.classList.add('on'); pop.querySelector('.x').onclick = () => pop.classList.remove('on');
+  pop.querySelector('.sv').onclick = async () => { const r = pop.querySelector('textarea').value.trim(), sp = pop.querySelector('.ac span'); if (!r) return; try { await updateDoc(o.ref, { reply: r, replyTs: serverTimestamp() }); sp.textContent = '✓'; updateOwner(); setTimeout(() => pop.classList.remove('on'), 900); } catch (e) { sp.textContent = e.code || 'error'; } };
+}
+async function hashGo() {   // arriving from another page: #fbgo=<comment id>
+  const m = location.hash.match(/fbgo=([^&]+)/); if (!m) return; const id = decodeURIComponent(m[1]);
+  history.replaceState(null, '', location.pathname + location.search);
+  await waitUser; for (let i = 0; i < 40 && !isOwner(); i++) await new Promise(r => setTimeout(r, 150));
+  if (!isOwner()) return;
+  try { const s = await getDoc(doc(db, 'comments', id)); if (!s.exists()) return; const c = s.data(); setTimeout(() => goNote({ kind: 'c', id, ref: s.ref, c, key: c.item, lang: c.lang, title: c.title, ts: 0 }), 600); } catch (e) {}
+}
+bell.onclick = openNotes; bell.hidden = true;
+new MutationObserver(updateBell).observe(h, { attributes: true, attributeFilter: ['class', 'lang'] });
+setInterval(() => { if (h.classList.contains('own')) updateBell(); }, 60000);
+
 /* ---------- wire up ---------- */
 function scan() {
   document.querySelectorAll('.fbBar:not([data-on])').forEach(build);
   const ob = document.querySelector('.wnBar [data-a=inbox]'); if (ob && !ob.dataset.on) { ob.dataset.on = '1'; ob.onclick = openInbox; updateOwner(); }
+  const nb = document.querySelector('.wnBar [data-a=notif]'); if (nb && !nb.dataset.on) { nb.dataset.on = '1'; nb.onclick = openNotes; updateBell(); }
 }
 new MutationObserver(scan).observe(document.body, { childList: true, subtree: true });
 new MutationObserver(() => document.querySelectorAll('.fbBar[data-on]').forEach(b => { if (!b.dataset.lang) { label(b); refresh(b); } })).observe(h, { attributes: true, attributeFilter: ['lang'] });

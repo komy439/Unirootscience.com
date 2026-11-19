@@ -216,3 +216,30 @@ html[lang=ar] .wnF .nm{font-size:19px!important}
 html[lang=ar] .wnNext span{font:700 13px Ami,serif;letter-spacing:0}
 html[lang=ar] .wnNext b,html[lang=ar] .wnNext input{font:700 15px/1.4 Ami,serif}
 @media (max-width:700px){.wnNext{flex-direction:column;align-items:stretch;gap:3px;padding:7px 12px}.wnNext b{-webkit-line-clamp:2}}
+/* owner notifications */
+.fbBell{all:unset;display:none;position:fixed;z-index:31;top:64px;inset-inline-start:max(20px,calc((100vw - 1160px)/2 + 20px));cursor:pointer;padding:6px 12px;border-radius:999px;border:1px solid rgba(243,207,122,.45);background:rgba(15,13,10,.9);font-size:17px;line-height:1}
+html.own .fbBell:not([hidden]){display:inline-flex;align-items:center;gap:6px}
+.fbBell b{font:700 12px Poppins,system-ui,sans-serif;color:#0c0b09;background:#ff6b2b;border-radius:999px;min-width:18px;padding:2px 6px;text-align:center;box-sizing:border-box}
+.fbNl{display:none;position:fixed;z-index:58;top:104px;inset-inline-start:max(14px,calc((100vw - 1160px)/2 + 14px));width:min(420px,calc(100vw - 28px));max-height:70vh;overflow:auto;background:#0f0d0a;border:1px solid #3a2f1e;border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.6)}
+.fbNl.on{display:block}
+.fbNl .hd,.fbPop .hd{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-bottom:1px solid #2a2218;color:#f3cf7a;font:600 14px Poppins,system-ui,sans-serif}
+.fbNl[dir=rtl] .hd,.fbPop[dir=rtl] .hd{font:700 16px Ami,serif}
+.fbNl .x,.fbPop .x{all:unset;cursor:pointer;color:#a8926b;font-size:20px;padding:0 4px}
+.fbNl .em{margin:0;padding:16px;color:#a8926b;font:14px Poppins,system-ui,sans-serif}
+.fbNl .it{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;width:100%;padding:11px 14px;border-bottom:1px solid #1d1912;color:#e9dcb8;font:13px Poppins,system-ui,sans-serif}
+.fbNl[dir=rtl] .it{font:15px Ami,serif}
+.fbNl .it:hover{background:#1a160f}
+.fbNl .it i{font-style:normal;color:#ff6b2b;font-size:16px}
+.fbNl .it span{display:flex;flex-direction:column;gap:3px;min-width:0}
+.fbNl .it em{font-style:normal;color:#cdbb92;overflow-wrap:anywhere}
+.fbNl .it small{color:#7d6c4d;font-size:11px}
+.fbPop{display:none;position:fixed;z-index:58;bottom:16px;inset-inline-end:16px;width:min(440px,calc(100vw - 32px));background:#0f0d0a;border:1px solid #ff6b2b;border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.6)}
+.fbPop.on{display:block}
+.fbPop .mt{padding:9px 14px 0;color:#7d6c4d;font:12px Poppins,system-ui,sans-serif}
+.fbPop p{margin:0;padding:8px 14px;color:#e9dcb8;font:14px/1.7 Poppins,system-ui,sans-serif;white-space:pre-wrap}
+.fbPop p[dir=rtl]{font:16px/1.8 Ami,serif}
+.fbPop textarea{display:block;box-sizing:border-box;width:calc(100% - 28px);margin:4px 14px;min-height:70px;background:#16130d;border:1px solid #3a2f1e;border-radius:9px;color:#e9dcb8;padding:8px;font:14px Poppins,system-ui,sans-serif}
+.fbPop .ac{display:flex;gap:10px;align-items:center;padding:8px 14px 13px}
+.fbPop .sv{all:unset;cursor:pointer;padding:6px 14px;border-radius:999px;background:#f3cf7a;color:#0c0b09;font:600 13px Poppins,system-ui,sans-serif}
+.fbPop .ac span{color:#f3cf7a}
+.fbFlash{outline:2px solid #ff6b2b;outline-offset:6px;border-radius:12px;transition:outline-color .6s}

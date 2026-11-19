@@ -35,7 +35,7 @@
   var shade = el('div', 'wnShade'), panel = el('aside', 'wnPanel'), form = el('div', 'wnForm'), view = el('div', 'wnView');
   panel.setAttribute('aria-label', "What's new");
   panel.innerHTML = '<div class="wnHead"><h3></h3><button type="button" class="wnX" aria-label="Close">×</button></div><div class="wnBody"></div>' +
-    '<div class="wnBar wnOwn"><span></span><button type="button" data-a="inbox">💬</button><label><i></i><b class="bl"></b><input type="number" min="0" max="99" inputmode="numeric"></label><button type="button" data-a="pub" class="pub">Publish</button><button type="button" data-a="copy">Copy</button><button type="button" data-a="reset">Reset</button></div>';
+    '<div class="wnBar wnOwn"><span></span><button type="button" data-a="notif">🔔</button><button type="button" data-a="inbox">💬</button><label><i></i><b class="bl"></b><input type="number" min="0" max="99" inputmode="numeric"></label><button type="button" data-a="pub" class="pub">Publish</button><button type="button" data-a="copy">Copy</button><button type="button" data-a="reset">Reset</button></div>';
   var body = panel.querySelector('.wnBody'), badgeIn = panel.querySelector('.wnBar input');
 
   function save() { try { localStorage.setItem(DK, JSON.stringify(data)); } catch (e) {} }
@@ -159,6 +159,17 @@
   function fbKey(i) { return String(i.id || i.ref || '').replace(/-(ar|en)$/, ''); }
   function fbBar(key, title, lang) { var d = el('div', 'fbBar'); d.dataset.key = key; d.dataset.title = title; if (lang) d.dataset.lang = lang; return d; }
   window.URP = function (src, poster) { return player(src, poster); };
+  /* the owner's notifications: take me to the place of an item (its bar on the page, its section, or open it) */
+  window.WNgo = function (key, lang) {
+    var vis = [].slice.call(document.querySelectorAll('.fbBar')).filter(function (b) { return b.dataset.key === key && b.offsetParent && !panel.contains(b); });
+    if (lang) vis.sort(function (a, b) { return (b.dataset.lang === lang) - (a.dataset.lang === lang); });
+    if (vis.length) { close(); return vis[0]; }
+    if (/^sec-/.test(key)) { var s = document.querySelector('[data-wn="' + key.slice(4) + '"]'); if (s) { close(); return s.querySelector('.fbBar') || s; } }
+    var it = data.items.filter(function (i) { return i.id && fbKey(i) === key; }), i = it.filter(function (x) { return x.lang === lang; })[0] || it[0];
+    if (i) { close(); show(i); return view.querySelector('.fbBar') || view; }
+    return null;
+  };
+  window.WNtitle = function (key) { var i = data.items.filter(function (x) { return x.id && fbKey(x) === key; }); if (i.length) return (i.filter(function (x) { return x.lang === L(); })[0] || i[0]).title; var s = document.querySelector('[data-wn="' + key.replace(/^sec-/, '') + '"]'); return s ? (s.getAttribute('data-wn-en') + ' · ' + s.getAttribute('data-wn-ar')) : key; };
   function openArt(i) { /* an Arabic item opens the Arabic article, an English item the English one */ if (i.lang && i.lang !== L()) { var s = document.querySelector('[data-l="' + i.lang + '"]'); if (s) s.click(); } var b = document.querySelector('[data-art="' + i.ref + '"]'); if (b) { setTimeout(function () { b.click(); }, i.lang && i.lang !== L() ? 60 : 0); return true; } return false; }
   function closeView() { var v = view.querySelector('video'); if (v) v.pause(); view.classList.remove('on'); view.innerHTML = ''; }
   function show(i) {
