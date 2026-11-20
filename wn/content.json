@@ -347,6 +347,21 @@
    "pin": true
   },
   {
+   "id": "tr2ma-ar",
+   "cat": "math",
+   "lang": "ar",
+   "type": "video",
+   "title": "الوقت كنتيجةٍ لا حدّ · الجزء ٢ · التردد… والديوتي… والوقت كحدّ",
+   "sub": "هل يشبه هذا… سلوك الجسيم المضاد؟",
+   "text": "",
+   "ref": "videos/time-result-2-ar.mp4",
+   "poster": "videos/time-result-2-ar.jpg",
+   "date": "2026-11-20",
+   "show": true,
+   "isNew": true,
+   "pin": true
+  },
+  {
    "id": "tr1ma-en",
    "cat": "math",
    "lang": "en",
@@ -357,6 +372,21 @@
    "ref": "videos/time-result-1-en.mp4",
    "poster": "videos/time-result-1-en.jpg",
    "date": "2026-11-19",
+   "show": true,
+   "isNew": true,
+   "pin": true
+  },
+  {
+   "id": "tr2ma-en",
+   "cat": "math",
+   "lang": "en",
+   "type": "video",
+   "title": "Time as a Result, Not a Limit · Part 2 · Frequency… duty… and time as a limit",
+   "sub": "Does this resemble… the behaviour of an antiparticle?",
+   "text": "",
+   "ref": "videos/time-result-2-en.mp4",
+   "poster": "videos/time-result-2-en.jpg",
+   "date": "2026-11-20",
    "show": true,
    "isNew": true,
    "pin": true
@@ -725,6 +755,21 @@
    "pin": true
   },
   {
+   "id": "tr2ph-ar",
+   "cat": "physics",
+   "lang": "ar",
+   "type": "video",
+   "title": "الوقت كنتيجةٍ لا حدّ · الجزء ٢ · التردد… والديوتي… والوقت كحدّ",
+   "sub": "هل يشبه هذا… سلوك الجسيم المضاد؟",
+   "text": "",
+   "ref": "videos/time-result-2-ar.mp4",
+   "poster": "videos/time-result-2-ar.jpg",
+   "date": "2026-11-20",
+   "show": true,
+   "isNew": true,
+   "pin": true
+  },
+  {
    "id": "tr1ph-en",
    "cat": "physics",
    "lang": "en",
@@ -735,6 +780,21 @@
    "ref": "videos/time-result-1-en.mp4",
    "poster": "videos/time-result-1-en.jpg",
    "date": "2026-11-19",
+   "show": true,
+   "isNew": true,
+   "pin": true
+  },
+  {
+   "id": "tr2ph-en",
+   "cat": "physics",
+   "lang": "en",
+   "type": "video",
+   "title": "Time as a Result, Not a Limit · Part 2 · Frequency… duty… and time as a limit",
+   "sub": "Does this resemble… the behaviour of an antiparticle?",
+   "text": "",
+   "ref": "videos/time-result-2-en.mp4",
+   "poster": "videos/time-result-2-en.jpg",
+   "date": "2026-11-20",
    "show": true,
    "isNew": true,
    "pin": true
