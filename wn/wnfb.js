@@ -107,12 +107,14 @@ async function mine(b) {
 /* ---------- owner inbox ---------- */
 const inbox = document.createElement('div'); inbox.className = 'fbIn';
 document.body.appendChild(inbox);
+const isUnread = (id, c) => !c.seen && !lsGet('uniroot_notif_seen', []).includes(id);
 async function updateOwner() {
   const ob = document.querySelector('.wnBar [data-a=inbox]'); if (!ob) return;
   ob.textContent = (L() === 'ar' ? '💬 التعليقات' : '💬 Comments');
   if (!isOwner()) return;
-  try { const s = await getDocs(query(collection(db, 'comments'), orderBy('ts', 'desc'), limit(300))); const n = s.docs.filter(d => !d.data().reply).length; if (n) ob.textContent += ' (' + N(n, L()) + ')'; } catch (e) {}
+  try { const s = await getDocs(query(collection(db, 'comments'), orderBy('ts', 'desc'), limit(300))); const n = s.docs.filter(d => isUnread(d.id, d.data())).length; if (n) { const b = document.createElement('b'); b.className = 'fbRed'; b.textContent = N(n, L()); ob.appendChild(b); } } catch (e) {}
 }
+function paintCount() { const b = inbox.querySelector('.hd .fbRed'); if (!b) return; const n = inbox.querySelectorAll('.it.unread').length; b.hidden = !n; b.textContent = N(n, L()); }
 async function openInbox() {
   const ar = L() === 'ar';
   if (!isOwner()) {
@@ -120,7 +122,7 @@ async function openInbox() {
     if (!isOwner()) { status(ar ? 'هذا الحساب ليس حساب المالك' : 'Not the owner account'); await signOut(auth); return; }
   }
   inbox.dir = ar ? 'rtl' : 'ltr';
-  inbox.innerHTML = '<div class="bx"><div class="hd"><h4>' + (ar ? 'التعليقات' : 'Comments') + '</h4><button type="button" class="x">×</button></div><div class="ls">' + (ar ? 'جارٍ التحميل…' : 'Loading…') + '</div><div class="ft"><button type="button" class="out">' + (ar ? 'خروج من حساب المالك' : 'Sign out of owner') + '</button></div></div>';
+  inbox.innerHTML = '<div class="bx"><div class="hd"><h4>' + (ar ? 'التعليقات' : 'Comments') + ' <b class="fbRed" hidden></b></h4><button type="button" class="x">×</button></div><div class="ls">' + (ar ? 'جارٍ التحميل…' : 'Loading…') + '</div><div class="ft"><button type="button" class="out">' + (ar ? 'خروج من حساب المالك' : 'Sign out of owner') + '</button></div></div>';
   inbox.classList.add('on');
   inbox.querySelector('.x').onclick = () => inbox.classList.remove('on');
   inbox.querySelector('.out').onclick = async () => { await signOut(auth); inbox.classList.remove('on'); };
@@ -130,12 +132,25 @@ async function openInbox() {
     if (!s.size) { ls.textContent = ar ? 'لا توجد تعليقات بعد.' : 'No comments yet.'; return; }
     ls.innerHTML = '';
     s.docs.forEach(d => {
-      const c = d.data(), el = document.createElement('div'); el.className = 'it' + (c.reply ? '' : ' new'); el.dir = c.lang === 'ar' ? 'rtl' : 'ltr';
-      el.innerHTML = '<div class="mt"><b>' + esc(c.title) + '</b><span>' + esc(c.name || (ar ? 'بدون اسم' : 'No name')) + (c.email ? ' · ' + (/@/.test(c.email) ? '<a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>' : /^[+\d\s-]{7,}$/.test(c.email) ? '<a href="https://wa.me/' + esc(c.email.replace(/[^\d]/g, '').replace(/^0/, '20')) + '" target="_blank" rel="noopener">WhatsApp ' + esc(c.email) + '</a>' : esc(c.email)) : '') + ' · ' + when(c.ts, c.lang) + '</span></div><p>' + esc(c.text) + '</p><textarea placeholder="' + (ar ? 'ردّك…' : 'Your reply…') + '">' + esc(c.reply || '') + '</textarea><div class="ac"><button type="button" class="sv">' + (ar ? 'حفظ الرد' : 'Save reply') + '</button><button type="button" class="dl">🗑</button><span></span></div>';
-      el.querySelector('.sv').onclick = async () => { const r = el.querySelector('textarea').value.trim(), sp = el.querySelector('.ac span'); try { await updateDoc(d.ref, { reply: r, replyTs: serverTimestamp() }); sp.textContent = '✓'; el.classList.toggle('new', !r); updateOwner(); } catch (e) { sp.textContent = e.code || 'error'; } };
-      el.querySelector('.dl').onclick = async () => { try { await deleteDoc(d.ref); el.remove(); updateOwner(); } catch (e) {} };
+      const c = d.data(), el = document.createElement('div'); let un = isUnread(d.id, c);
+      el.className = 'it' + (un ? ' unread' : '') + (c.reply ? ' done' : ''); el.dir = c.lang === 'ar' ? 'rtl' : 'ltr';
+      const pv = esc(c.text.slice(0, 90)) + (c.text.length > 90 ? '…' : '');
+      el.innerHTML = '<div class="op"><i class="dot"></i><div class="mt"><b>' + esc(c.title) + '</b><span>' + esc(c.name || (ar ? 'بدون اسم' : 'No name')) + ' · ' + when(c.ts, c.lang) + '</span>' + (c.reply ? '<em class="rp">' + (ar ? '✓ تم الرد' : '✓ replied') + '</em>' : '') + '</div><div class="pv">' + pv + '</div></div>' +
+        '<div class="full" hidden><div class="ct">' + (c.email ? (/@/.test(c.email) ? '<a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>' : /^[+\d\s-]{7,}$/.test(c.email) ? '<a href="https://wa.me/' + esc(c.email.replace(/[^\d]/g, '').replace(/^0/, '20')) + '" target="_blank" rel="noopener">WhatsApp ' + esc(c.email) + '</a>' : esc(c.email)) : '') + '</div><p>' + esc(c.text) + '</p><textarea placeholder="' + (ar ? 'ردّك…' : 'Your reply…') + '">' + esc(c.reply || '') + '</textarea><div class="ac"><button type="button" class="sv">' + (ar ? 'حفظ الرد' : 'Save reply') + '</button><button type="button" class="dl">🗑</button><span></span></div></div>';
+      el.querySelector('.op').onclick = async () => {
+        const f = el.querySelector('.full'); f.hidden = !f.hidden; el.classList.toggle('open', !f.hidden);
+        if (!f.hidden && un) {   // opened: its red mark goes away, here and in the bell
+          un = false; el.classList.remove('unread');
+          const sn = lsGet('uniroot_notif_seen', []); if (!sn.includes(d.id)) { sn.push(d.id); lsSet('uniroot_notif_seen', sn.slice(-500)); }
+          try { await updateDoc(d.ref, { seen: true }); } catch (e) {}
+          updateOwner(); updateBell(); paintCount();
+        }
+      };
+      el.querySelector('.sv').onclick = async () => { const r = el.querySelector('textarea').value.trim(), sp = el.querySelector('.ac span'); try { await updateDoc(d.ref, { reply: r, replyTs: serverTimestamp() }); sp.textContent = '✓'; el.classList.toggle('done', !!r); updateOwner(); } catch (e) { sp.textContent = e.code || 'error'; } };
+      el.querySelector('.dl').onclick = async () => { try { await deleteDoc(d.ref); el.remove(); updateOwner(); paintCount(); } catch (e) {} };
       ls.appendChild(el);
     });
+    paintCount();
   } catch (e) { ls.textContent = (ar ? 'تعذّر التحميل: ' : 'Could not load: ') + (e.code || e.message); }
 }
 
